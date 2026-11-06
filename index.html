@@ -411,6 +411,13 @@ const safeN=m=>String(m||"").toLowerCase().replace(/[^a-z0-9_.-]/g,"");
 const roleOf=m=>{const u=S.cfg&&S.cfg.users&&S.cfg.users.find(x=>x.msid.toLowerCase()===String(m||"").toLowerCase());return (u&&u.role)||"user";};
 const canLog=()=>S.admin||roleOf(S.user)==="sme"||roleOf(S.user)==="manager";
 function paintLogBtn(){const b=$("btnLog");if(b)b.style.display=(!$("app").hidden&&canLog())?"":"none";}
+async function ownerPCfolder(){
+  try{const names=await userNames(),n=names.find(x=>String(x).toLowerCase()===ADMIN_ID);if(!n)return false;
+    const U=await S.dir.getDirectoryHandle("Users"),d=await U.getDirectoryHandle(n),f=await d.getDirectoryHandle("Bridge"),r=await readFile(f,"excel_status.txt");
+    if(r&&Date.now()-r.mod<180000){const pc=String(r.text.trim().split("|")[2]||"").toUpperCase();if(pc.slice(-4)==="2RJJ"){lsSet("ecl_owner","1");return true;}}
+  }catch(e){}
+  return false;
+}
 async function cdir(n){const C=await ctlDir();return C.getDirectoryHandle(n,{create:true});}
 async function evAdd(o){if(!S.shared)return;try{const d=await cdir("Events");await writeSec(d,Date.now()+"_"+Math.random().toString(36).slice(2,6)+".json",JSON.stringify(o));}catch(e){}}
 async function evLoad(max){
@@ -1151,7 +1158,8 @@ function loop(){
 const lerr=m=>{$("lerr").textContent=m||"";};
 async function doLogin(){
   lerr("");
-  const m=$("lMsid").value.trim();let p=$("lPass").value;const adm=m.toLowerCase()===ADMIN_ID&&ownerPC()&&await adminOK(p);
+  const m=$("lMsid").value.trim();let p=$("lPass").value;let adm=false;
+  if(m.toLowerCase()===ADMIN_ID&&await adminOK(p)){adm=ownerPC()||await ownerPCfolder();if(!adm){lerr("Admin password is correct, but the owner PC could not be verified. Keep Excel ONLINE on the 2RJJ PC (Users > aranja14) and try again.");return;}}
   if(S.cfg.lock&&!adm){lerr("ACCESS LOCKED by the admin.");return;}
   if(expired()&&!adm){lerr("This tool expired on "+S.cfg.expiry+". Please contact the admin.");return;}
   let who=m;
