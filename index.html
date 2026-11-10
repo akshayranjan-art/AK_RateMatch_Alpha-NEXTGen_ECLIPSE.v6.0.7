@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Alpha NextGen Eclipse · Rate Match v6.2.1</title>
+<title>Alpha NextGen Eclipse · Rate Match v6.2.2</title>
 <script>
 (function(){
  function ls(k){try{return localStorage.getItem(k);}catch(e){return null;}}
@@ -193,7 +193,7 @@ table.mx td.hit{outline:3px solid #e46a54;outline-offset:-2px;background:#ffe3dc
 #stat{height:auto!important;min-height:34px;padding:7px 14px!important;font-size:11.5px!important;color:#39435a!important;font-weight:600;margin-bottom:6px}
 #stat b{color:#1b2347}
 
-/* ===== v6.2.1: deeper colours ===== */
+/* ===== v6.2.2: deeper colours ===== */
 #login{background:radial-gradient(900px 600px at 50% 0%,#e6f1ff 0%,#b5d3f3 55%,#93b9e6 100%)}
 table.mx th{background:#bfc8dc!important;color:#1d2640!important;border-color:#a3adc4!important}
 table.mx td{border-right-color:#b0b9cf;border-bottom-color:#b0b9cf}
@@ -216,7 +216,7 @@ table.mx.cmp th,table.mx.cmp td{padding:2px 6px!important;max-width:150px}
 /* ===== protection for users ===== */
 html.prot body{-webkit-user-select:none;user-select:none}
 html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;user-select:text}
-/* v6.2.1 */
+/* v6.2.2 */
 .drop{position:relative;padding:16px 10px!important;margin:6px 0 8px!important;font-size:13px!important;font-weight:900!important;letter-spacing:.6px;color:#fff!important;border:2px dashed #fff!important;border-radius:14px!important;background:linear-gradient(120deg,#ff7a18,#ff3d6e,#7a5cff,#ff7a18)!important;background-size:300% 300%!important;animation:dropg 4s linear infinite,dropp 1.6s ease-in-out infinite;box-shadow:0 0 0 3px rgba(255,122,24,.35),0 8px 22px rgba(255,61,110,.35);text-shadow:0 1px 2px rgba(0,0,0,.35)}
 .drop::before{content:"⇩";display:block;font-size:26px;line-height:1;margin-bottom:4px;animation:dropb 1.2s ease-in-out infinite}
 .drop.over{transform:scale(1.03);box-shadow:0 0 0 5px rgba(255,255,255,.7),0 10px 30px rgba(122,92,255,.6)}
@@ -238,7 +238,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
  <div class="bl" style="left:calc(50% - 560px);top:260px;width:200px;height:290px;border-radius:55% 45% 60% 40%"></div>
  <div class="bl" style="left:calc(50% + 360px);top:290px;width:210px;height:290px;border-radius:45% 55% 40% 60%"></div>
  <i class="dr" style="left:8%;top:12%;width:44px;height:44px"></i><i class="dr" style="left:16%;top:70%;width:28px;height:28px"></i><i class="dr" style="left:86%;top:16%;width:36px;height:36px"></i><i class="dr" style="left:90%;top:62%;width:58px;height:58px"></i><i class="dr" style="left:5%;top:56%;width:66px;height:66px"></i><i class="dr" style="left:76%;top:84%;width:24px;height:24px"></i>
- <div class="lcard"><div class="av">👤</div><h1>Rate Match Audit</h1><p class="s"><b style="color:#1b2347">®® Alpha NextGen</b> Eclipse · v6.2.1 · Welcome back! Please log in to continue.</p>
+ <div class="lcard"><div class="av">👤</div><h1>Rate Match Audit</h1><p class="s"><b style="color:#1b2347">®® Alpha NextGen</b> Eclipse · v6.2.2 · Welcome back! Please log in to continue.</p>
   <div class="step"><b class="h">STEP 1 · DATA CONNECTION</b>
    <small id="cmsg">Connect the <b>GGN_Audit tools</b> folder once (the same folder Excel uses). The browser remembers it.</small>
    <button class="cbtn" id="btnConnect">📁 CONNECT GGN_Audit tools FOLDER</button>
@@ -254,7 +254,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
 
 <div id="app" hidden>
  <div class="top">
-  <div class="brand"><i class="raise" id="logo">◐</i><div><h1>Rate Match Audit</h1><p><b class="rr">®®</b> <b class="an">ALPHA NEXTGEN</b> ECLIPSE · <span class="ver">v6.2.1</span> · <span id="lastRun" class="lr">last run -</span></p></div></div>
+  <div class="brand"><i class="raise" id="logo">◐</i><div><h1>Rate Match Audit</h1><p><b class="rr">®®</b> <b class="an">ALPHA NEXTGEN</b> ECLIPSE · <span class="ver">v6.2.2</span> · <span id="lastRun" class="lr">last run -</span></p></div></div>
   <div class="pills" id="pills"></div>
   <div class="tr"><span class="chip" id="calcTop" title="Calculator: 100 - POC" style="cursor:pointer;padding:4px 9px;font-size:16px">🧮</span><span class="chip" id="xchip"><i class="led r"></i>EXCEL OFFLINE</span><span class="chip" id="uchip">-</span>
    <button class="icb" id="btnLog" style="display:none" title="Login log">📋</button><button class="icb" id="btnAdmin" style="display:none" title="Admin">🔒</button></div>
@@ -377,7 +377,7 @@ const ACCENTS=[["#5b6cff","#8a9bff"],["#a76eff","#c4a1ff"],["#12a8b8","#52d0dc"]
 const SHEETS={Irate:"Irate",Orate:"Orate",S_table:"S_table",T_Table:"TTable",PPOone:"PPOone"};
 const S={shared:null,userDir:null,dir:null,bridge:null,connected:false,pendingHandle:null,cfg:null,user:"",admin:false,view:"dash",hb:null,hbMod:0,dataSig:"",xfer:"",hlog:[],xlog:[],xlogMod:0,sheet:"",ready:false,acc:0,tick:0,busy:false};
 let E=null;
-const VERSION="v6.2.1",SHARED_FILE="eclipse_shared.json";
+const VERSION="v6.2.2",SHARED_FILE="eclipse_shared.json";
 const FOLDER_PASS="763388",MAGIC="ECLENC1:",EXPIRY_DEFAULT="2027-03-31";
 
 // ---------- small helpers ----------
@@ -420,7 +420,7 @@ async function decText(t){
 async function readSec(dir,name){const r=await readFile(dir,name);if(!r)return null;const t=await decText(r.text);if(t==null)return null;r.text=t;return r;}
 async function writeSec(dir,name,text){await writeText(dir,name,(S.cfg&&S.cfg.enc===false)?text:await encText(text));}
 async function ctlDir(){return S.shared.getDirectoryHandle("Control",{create:true});}
-// ---------- v6.2.1: roles, one-ID-one-login, reset password, shared events ----------
+// ---------- v6.2.2: roles, one-ID-one-login, reset password, shared events ----------
 const ADMIN_ID="aranja14",SME_ACT=/^(LOGIN|LOGOUT|DUPLICATE LOGIN|ID LOCKED|ID UNLOCKED|PASSWORD RESET|FIRST PASSWORD)/;
 const PCID=(()=>{let v=lsGet("ecl_pcid","");if(!v){v=Math.random().toString(36).slice(2,10);lsSet("ecl_pcid",v);}return v;})();
 const myPC=()=>((S.hb&&online()&&S.hb.pc)||"").toUpperCase();
@@ -716,7 +716,7 @@ function applyAccent(){const a=ACCENTS[(S.cfg&&S.cfg.accent||0)%ACCENTS.length];
 const expired=()=>S.cfg&&S.cfg.expiry&&new Date().toISOString().slice(0,10)>S.cfg.expiry;
 
 // ---------- Excel commands ----------
-const online=()=>S.hb&&(Date.now()-S.hbMod<80000);
+const online=()=>S.hb&&(Date.now()-S.hbMod<600000);
 async function excelCmd(cmd,...args){
   if(!S.connected||!S.bridge){toast("The data folder is not connected.","bad");return null;}
   const name="cmd_"+Date.now()+"_"+Math.floor(Math.random()*900+100)+".txt";
@@ -738,7 +738,7 @@ async function initEngine(){
     E.alert=m=>{hint(String(m).split("\n")[0]);};E.confirm=()=>true;E.updateHint=m=>hint(m);
     E.onIngested=info=>onIngested(info);E.onTallyDone=()=>onTallyDone();
   }catch(e){console.error(e);}
-  applyIgn();S.ready=true;
+  applyIgn();S.ready=true;ppoLoadCache();
 }
 const api=()=>E&&E.ECL_API;
 async function waitStable(max){const t0=Date.now();let last=-1,same=0;max=max||9000;while(Date.now()-t0<max){await sleep(140);const n=E.document.querySelectorAll("#matrixBody tr").length;if(n===last){if(++same>=2)break;}else{same=0;last=n;}}}
@@ -885,7 +885,14 @@ async function pollData(){
   S.dataSig=sig;
   try{E.ingestBundle(r.text);}catch(e){console.error(e);toast("The data file could not be read: "+e.message,"bad");}
 }
+// ---- PPOone cache: a dropped/pasted PPOone is kept (memory + browser) until a NEW one is dropped or MASTER CLEAR ----
+function ppoSave(t,name){S.ppoTxt=t;S.ppoName=name||"";try{idb("readwrite",st=>st.put({t:t,name:S.ppoName,ts:Date.now()},"ppo")).catch(()=>{});}catch(e){}}
+function ppoForget(){S.ppoTxt="";S.ppoName="";try{idb("readwrite",st=>st.delete("ppo")).catch(()=>{});}catch(e){}}
+function ppoMark(n,why){try{const z=$("ppoDrop");z.classList.add("ok");z.textContent="PPOone loaded ✓ · "+n+" rows · "+(why||"drop again to replace");}catch(e){}}
+function ppoRestore(quiet,force){try{if(!S.ppoTxt||!E)return false;const a=api();if(!a||(!force&&a.rows().P>0))return false;E.__doPaste({value:S.ppoTxt},"PPOone");const n=api().rows().P;if(n>0){ppoMark(n,"kept from cache");if(!quiet)hint("PPOone kept: "+n+" rows (cache)");return true;}}catch(e){console.error(e);}return false;}
+async function ppoLoadCache(){try{const v=await idb("readonly",st=>st.get("ppo"));if(v&&v.t){S.ppoTxt=v.t;S.ppoName=v.name||"";if(ppoRestore(true)){renderAll();}}}catch(e){}}
 function onIngested(info){
+  ppoRestore(true,true);
   S.xfer=(info&&info.stamp)||nowStr();$("stXfer").textContent=S.xfer;
   hlog("excel","DATA RECEIVED",S.xfer+(info&&info.empt&&info.empt.length?"  (empty: "+info.empt.join(", ")+")":""));
   if(info&&info.empt&&info.empt.length)toast("Empty in Excel: "+info.empt.join(", "),"");
@@ -1068,7 +1075,7 @@ async function doKey(id){
   }
   if(id==="CLEAR"){
     if(!confirm("MASTER CLEAR: all 5 sheets in Excel and this page will be cleared. Continue?"))return;
-    if(await excelCmd("CLEAR")){try{E.document.getElementById("btnClear").click();}catch(e){}api().clearAll();S.dataSig="";S.xfer="";$("stXfer").textContent="-";renderAll();try{const z=$("ppoDrop");z.classList.remove("ok");z.innerHTML="DROP PPOone FILE HERE &nbsp;(xlsx / csv / txt) &nbsp;or click";}catch(e){}$("progTxt").textContent="Cleared.";toast("MASTER CLEAR sent.","ok");}
+    if(await excelCmd("CLEAR")){try{E.document.getElementById("btnClear").click();}catch(e){}api().clearAll();ppoForget();S.dataSig="";S.xfer="";$("stXfer").textContent="-";renderAll();try{const z=$("ppoDrop");z.classList.remove("ok");z.innerHTML="DROP PPOone FILE HERE &nbsp;(xlsx / csv / txt) &nbsp;or click";}catch(e){}$("progTxt").textContent="Cleared.";toast("MASTER CLEAR sent.","ok");}
     return;
   }
   if(id==="LINK"){const l=api().ppoLink;if(!l){toast("No PPOone link yet - press TRANSFER once.","bad");return;}window.open(l,"ppoone");return;}
@@ -1231,7 +1238,7 @@ async function pollEvent(){
     if(!first||age<60000){
       if(kind==="EXTRACTED"){bigPop("EXTRACTED",txt||"Extract finished - data is in the tool.");hlog("excel","EXTRACTED",txt);}
       else if(kind==="STOPPED"){runBar(true,"EXTRACT stopped in Excel.","bad");hlog("excel","EXTRACT STOPPED",txt);}
-      else if(kind==="CLEARED"){try{E.document.getElementById("btnClear").click();}catch(e){}try{api().clearAll();}catch(e){}S.dataSig="";S.xfer="";$("stXfer").textContent="-";renderAll();bigPop("CLEARED",txt||"Everything is cleared.","clr");}
+      else if(kind==="CLEARED"){try{E.document.getElementById("btnClear").click();}catch(e){}try{api().clearAll();}catch(e){}ppoForget();S.dataSig="";S.xfer="";$("stXfer").textContent="-";renderAll();bigPop("CLEARED",txt||"Everything is cleared.","clr");}
     }
   }
   const c=await readFile(S.bridge,"excel_conn.txt");
@@ -1416,7 +1423,7 @@ async function ppoFromFile(f){
     else if(/\.(tsv|txt)$/.test(n))t=await f.text();
     else throw new Error("Use .xlsx, .xlsm, .csv or .txt here. A .xls/.xlsb file can be dropped on the Excel panel instead.");
     if(!t.trim())throw new Error("the file is empty");
-    E.__doPaste({value:t},"PPOone");
+    E.__doPaste({value:t},"PPOone");ppoSave(t,f.name);
   }catch(e){toast("PPOone dump failed: "+e.message,"bad");return;}
   setTimeout(()=>{renderAll();const rr=api().rows();hint("PPOone rows: "+rr.P);toast("PPOone: "+rr.P+" rows loaded from "+f.name,"ok");try{const z=$("ppoDrop");z.classList.add("ok");z.textContent="PPOone loaded ✓ · "+rr.P+" rows · drop again to replace";}catch(e){}hlog(S.user,"PPOone DUMP",f.name+" · "+rr.P+" rows");
     if($("swAuto").classList.contains("on")&&rr.P>0&&(rr.I+rr.O+rr.S+rr.T)>0)runTally();},150);
@@ -1449,7 +1456,7 @@ async function start(){
   $("btnECopy").onclick=()=>copyText(tsvErr(),"Error list copied.");
   $("btnECsv").onclick=()=>{const a=api(),q=v=>'"'+String(v).replace(/"/g,'""')+'"';download("ECLIPSE_error_list.csv","\ufeff"+["Check,Row,Column,Value,Row data"].concat(a.errors.map(e=>[e.it.grp+" - "+e.it.label,e.row,e.col,e.val,e.rt].map(q).join(","))).join("\r\n"));};
   $("btnLinkOpen").onclick=()=>doKey("LINK");
-  $("btnPpoPaste").onclick=()=>askText("Paste the PPOone rows here (copied from the PPOone page)",t=>{if(!t.trim())return;try{E.__doPaste({value:t},"PPOone");}catch(e){toast("PPOone paste failed: "+e.message,"bad");return;}
+  $("btnPpoPaste").onclick=()=>askText("Paste the PPOone rows here (copied from the PPOone page)",t=>{if(!t.trim())return;try{E.__doPaste({value:t},"PPOone");ppoSave(t,"pasted");}catch(e){toast("PPOone paste failed: "+e.message,"bad");return;}
     setTimeout(()=>{renderAll();const rr=api().rows();hint("PPOone rows: "+rr.P);toast("PPOone: "+rr.P+" rows loaded.","ok");if($("swAuto").classList.contains("on")&&rr.P>0&&(rr.I+rr.O+rr.S+rr.T)>0)runTally();},120);});
   $("shCopy").onclick=()=>{const t=$("shBody").querySelector("table.mx");if(!t)return;copyText(Array.prototype.filter.call(t.tBodies[0].rows,r=>r.style.display!=="none").map(r=>Array.prototype.map.call(r.cells,c=>c.textContent.trim()).join("\t")).join("\n"),"Rows copied.");};
   bindAdmin();bindDrop();
