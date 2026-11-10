@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Alpha NextGen Eclipse · Rate Match v6.2.3</title>
+<title>Alpha NextGen Eclipse · Rate Match v6.2.4</title>
 <script>
 (function(){
  function ls(k){try{return localStorage.getItem(k);}catch(e){return null;}}
@@ -193,7 +193,7 @@ table.mx td.hit{outline:3px solid #e46a54;outline-offset:-2px;background:#ffe3dc
 #stat{height:auto!important;min-height:34px;padding:7px 14px!important;font-size:11.5px!important;color:#39435a!important;font-weight:600;margin-bottom:6px}
 #stat b{color:#1b2347}
 
-/* ===== v6.2.3: deeper colours ===== */
+/* ===== v6.2.4: deeper colours ===== */
 #login{background:radial-gradient(900px 600px at 50% 0%,#e6f1ff 0%,#b5d3f3 55%,#93b9e6 100%)}
 table.mx th{background:#bfc8dc!important;color:#1d2640!important;border-color:#a3adc4!important}
 table.mx td{border-right-color:#b0b9cf;border-bottom-color:#b0b9cf}
@@ -216,7 +216,7 @@ table.mx.cmp th,table.mx.cmp td{padding:2px 6px!important;max-width:150px}
 /* ===== protection for users ===== */
 html.prot body{-webkit-user-select:none;user-select:none}
 html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;user-select:text}
-/* v6.2.3 */
+/* v6.2.4 */
 .drop{position:relative;padding:16px 10px!important;margin:6px 0 8px!important;font-size:13px!important;font-weight:900!important;letter-spacing:.6px;color:#fff!important;border:2px dashed #fff!important;border-radius:14px!important;background:linear-gradient(120deg,#ff7a18,#ff3d6e,#7a5cff,#ff7a18)!important;background-size:300% 300%!important;animation:dropg 4s linear infinite,dropp 1.6s ease-in-out infinite;box-shadow:0 0 0 3px rgba(255,122,24,.35),0 8px 22px rgba(255,61,110,.35);text-shadow:0 1px 2px rgba(0,0,0,.35)}
 .drop::before{content:"⇩";display:block;font-size:26px;line-height:1;margin-bottom:4px;animation:dropb 1.2s ease-in-out infinite}
 .drop.over{transform:scale(1.03);box-shadow:0 0 0 5px rgba(255,255,255,.7),0 10px 30px rgba(122,92,255,.6)}
@@ -238,7 +238,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
  <div class="bl" style="left:calc(50% - 560px);top:260px;width:200px;height:290px;border-radius:55% 45% 60% 40%"></div>
  <div class="bl" style="left:calc(50% + 360px);top:290px;width:210px;height:290px;border-radius:45% 55% 40% 60%"></div>
  <i class="dr" style="left:8%;top:12%;width:44px;height:44px"></i><i class="dr" style="left:16%;top:70%;width:28px;height:28px"></i><i class="dr" style="left:86%;top:16%;width:36px;height:36px"></i><i class="dr" style="left:90%;top:62%;width:58px;height:58px"></i><i class="dr" style="left:5%;top:56%;width:66px;height:66px"></i><i class="dr" style="left:76%;top:84%;width:24px;height:24px"></i>
- <div class="lcard"><div class="av">👤</div><h1>Rate Match Audit</h1><p class="s"><b style="color:#1b2347">®® Alpha NextGen</b> Eclipse · v6.2.3 · Welcome back! Please log in to continue.</p>
+ <div class="lcard"><div class="av">👤</div><h1>Rate Match Audit</h1><p class="s"><b style="color:#1b2347">®® Alpha NextGen</b> Eclipse · v6.2.4 · Welcome back! Please log in to continue.</p>
   <div class="step"><b class="h">STEP 1 · DATA CONNECTION</b>
    <small id="cmsg">Connect the <b>GGN_Audit tools</b> folder once (the same folder Excel uses). The browser remembers it.</small>
    <button class="cbtn" id="btnConnect">📁 CONNECT GGN_Audit tools FOLDER</button>
@@ -254,7 +254,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
 
 <div id="app" hidden>
  <div class="top">
-  <div class="brand"><i class="raise" id="logo">◐</i><div><h1>Rate Match Audit</h1><p><b class="rr">®®</b> <b class="an">ALPHA NEXTGEN</b> ECLIPSE · <span class="ver">v6.2.3</span> · <span id="lastRun" class="lr">last run -</span></p></div></div>
+  <div class="brand"><i class="raise" id="logo">◐</i><div><h1>Rate Match Audit</h1><p><b class="rr">®®</b> <b class="an">ALPHA NEXTGEN</b> ECLIPSE · <span class="ver">v6.2.4</span> · <span id="lastRun" class="lr">last run -</span></p></div></div>
   <div class="pills" id="pills"></div>
   <div class="tr"><span class="chip" id="calcTop" title="Calculator: 100 - POC" style="cursor:pointer;padding:4px 9px;font-size:16px">🧮</span><span class="chip" id="xchip"><i class="led r"></i>EXCEL OFFLINE</span><span class="chip" id="uchip">-</span>
    <button class="icb" id="btnLog" style="display:none" title="Login log">📋</button><button class="icb" id="btnAdmin" style="display:none" title="Admin">🔒</button></div>
@@ -299,7 +299,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
   <section class="view" id="v-admin"><div class="vwrap">
    <div class="sub" id="asub"></div>
    <div class="apane" id="ap-users">
-    <div class="raise card col" style="flex:1;min-height:0"><div class="l"><span id="uHead">USERS</span><span><button class="btn" id="btnUImp">⇩ IMPORT FROM EXCEL</button> <button class="btn" id="btnUPaste">⇩ PASTE LIST</button> <button class="btn p" id="btnUPush">⇪ PUSH TO EXCEL</button></span></div>
+    <div class="raise card col" style="flex:1;min-height:0"><div class="l"><span id="uHead">USERS</span><span><button class="btn" id="btnUImp">⇩ IMPORT FROM EXCEL</button> <button class="btn" id="btnUPaste">⇩ PASTE LIST</button> <button class="btn p" id="btnUPush">⇪ PUSH TO EXCEL</button> <button class="btn" id="btnUnlockAll">🔓 UNLOCK ALL IDs</button> <button class="btn" id="btnDupLock">DUPLICATE-LOGIN LOCK</button></span></div>
      <div style="flex:1;min-height:0;overflow:auto"><table class="t" id="uTable"></table></div></div>
     <div class="raise card col" style="width:300px;flex:none"><div class="l">ADD / EDIT USER</div>
      <input class="field" id="uM" placeholder="MSID  (e.g. nkumar14)"><input class="field" id="uC" placeholder="Computer name  (optional)"><input class="field" id="uP" placeholder="Password  (empty = last 4 of MSID)"><select class="field" id="uR"><option value="user">Role: USER</option><option value="sme">Role: SME</option><option value="manager">Role: MANAGER</option></select>
@@ -377,7 +377,7 @@ const ACCENTS=[["#5b6cff","#8a9bff"],["#a76eff","#c4a1ff"],["#12a8b8","#52d0dc"]
 const SHEETS={Irate:"Irate",Orate:"Orate",S_table:"S_table",T_Table:"TTable",PPOone:"PPOone"};
 const S={shared:null,userDir:null,dir:null,bridge:null,connected:false,pendingHandle:null,cfg:null,user:"",admin:false,view:"dash",hb:null,hbMod:0,dataSig:"",xfer:"",hlog:[],xlog:[],xlogMod:0,sheet:"",ready:false,acc:0,tick:0,busy:false};
 let E=null;
-const VERSION="v6.2.3",SHARED_FILE="eclipse_shared.json";
+const VERSION="v6.2.4",SHARED_FILE="eclipse_shared.json";
 const FOLDER_PASS="763388",MAGIC="ECLENC1:",EXPIRY_DEFAULT="2027-03-31";
 
 // ---------- small helpers ----------
@@ -420,7 +420,7 @@ async function decText(t){
 async function readSec(dir,name){const r=await readFile(dir,name);if(!r)return null;const t=await decText(r.text);if(t==null)return null;r.text=t;return r;}
 async function writeSec(dir,name,text){await writeText(dir,name,(S.cfg&&S.cfg.enc===false)?text:await encText(text));}
 async function ctlDir(){return S.shared.getDirectoryHandle("Control",{create:true});}
-// ---------- v6.2.3: roles, one-ID-one-login, reset password, shared events ----------
+// ---------- v6.2.4: roles, one-ID-one-login, reset password, shared events ----------
 const ADMIN_ID="aranja14",SME_ACT=/^(LOGIN|LOGOUT|DUPLICATE LOGIN|ID LOCKED|ID UNLOCKED|PASSWORD RESET|FIRST PASSWORD)/;
 const PCID=(()=>{let v=lsGet("ecl_pcid","");if(!v){v=Math.random().toString(36).slice(2,10);lsSet("ecl_pcid",v);}return v;})();
 const myPC=()=>((S.hb&&online()&&S.hb.pc)||"").toUpperCase();
@@ -455,7 +455,11 @@ async function sessionCheck(msid){
   const nm=safeN(msid)+".json";
   try{
     const L=await cdir("Locks"),lk=await readSec(L,nm);
-    if(lk){hlog(msid,"LOGIN","blocked - ID is locked",pcLabel());return "This ID is LOCKED. Please ask the admin to unlock it.";}
+    const dupOff=S.cfg&&S.cfg.dupLock===false,lockMs=((S.cfg&&S.cfg.lockMin)||30)*60000;
+    if(lk){let lj=null;try{lj=JSON.parse(lk.text);}catch(e){}
+      if(dupOff||(lj&&lj.t&&Date.now()-lj.t>lockMs)){try{await removeFile(L,nm);}catch(e){}}
+      else{hlog(msid,"LOGIN","blocked - ID is locked",pcLabel());return "This ID is LOCKED. Please ask the admin to unlock it.";}}
+    if(dupOff){try{await writeSec(await cdir("Sessions"),nm,JSON.stringify({t:Date.now(),pcid:PCID,pc:myPC()}));}catch(e){}return "";}
     const Sd=await cdir("Sessions"),ss=await readSec(Sd,nm);
     if(ss){let j=null;try{j=JSON.parse(ss.text);}catch(e){}
       if(j&&j.pcid!==PCID&&Date.now()-j.t<150000){
@@ -471,7 +475,8 @@ async function sessBeat(){
   if(S.admin||!S.shared||!S.user||$("app").hidden)return;
   const nm=safeN(S.user)+".json";
   try{const L=await cdir("Locks");
-    if(await readSec(L,nm)){hlog(S.user,"LOGOUT","forced - ID locked (second login detected)");const u=S.user;logout();lerr("The ID "+u+" was LOCKED because a second login was tried. Contact the admin.");return;}
+    const lkx=(S.cfg&&S.cfg.dupLock===false)?null:await readSec(L,nm);
+    if(lkx){hlog(S.user,"LOGOUT","forced - ID locked (second login detected)");const u=S.user;logout();lerr("The ID "+u+" was LOCKED because a second login was tried. Contact the admin.");return;}
     await writeSec(await cdir("Sessions"),nm,JSON.stringify({t:Date.now(),pcid:PCID,pc:myPC()}));
   }catch(e){}
 }
@@ -1107,7 +1112,7 @@ function renderSecurity(){
 
 function renderUsers(){
   const u=S.cfg.users,lk=S.locks||{},rs=S.resets||{};$("uHead").textContent="USERS · "+u.length+" · one match (MSID or computer) is enough";
-  $("uTable").innerHTML='<tr><th>MSID</th><th>COMPUTER NAME</th><th>ROLE</th><th>PASSWORD</th><th>ID STATUS</th><th>ACTIVE</th><th></th></tr>'+u.map((x,i)=>{const k=safeN(x.msid),L=lk[k];return '<tr><td><b>'+esc(x.msid)+'</b></td><td class="dim">'+esc(x.pc)+'</td><td>'+esc((x.role||"user").toUpperCase())+'</td><td class="dim">'+(rs[k]?"set by user":(x.pass?esc(x.pass):"(last 4: "+esc(defaultPass(x.msid))+")")+" · must change")+'</td><td>'+(L?'<span class="er">🔒 LOCKED</span> <a data-u="'+i+'" style="cursor:pointer;color:var(--ac);font-weight:800">UNLOCK</a><div class="dim" style="font-size:9.5px">'+esc(L.ts||"")+' · tried from '+esc(L.by||"?")+' · first login: '+esc(L.first||"?")+'</div>':'<span class="ok">free</span>')+'</td><td><span class="sw'+(x.active?" on":"")+'" data-a="'+i+'"></span></td><td><span data-r="'+i+'" style="cursor:pointer" title="Reset password to the default (user must set a new one)">↺</span> &nbsp; <span data-e="'+i+'" style="cursor:pointer">✎</span> &nbsp; <span data-d="'+i+'" class="er" style="cursor:pointer">🗑</span></td></tr>';}).join("");
+  $("uTable").innerHTML='<tr><th>MSID</th><th>COMPUTER NAME</th><th>ROLE</th><th>PASSWORD</th><th>ID STATUS</th><th>ACTIVE</th><th></th></tr>'+u.map((x,i)=>{const k=safeN(x.msid),L=lk[k];return '<tr><td><b>'+esc(x.msid)+'</b></td><td class="dim">'+esc(x.pc)+'</td><td>'+esc((x.role||"user").toUpperCase())+'</td><td class="dim">'+(rs[k]?"set by user":(x.pass?esc(x.pass):"(last 4: "+esc(defaultPass(x.msid))+")")+" · must change")+'</td><td>'+(L?'<span class="er">🔒 LOCKED</span> <a data-u="'+i+'" style="cursor:pointer;color:var(--ac);font-weight:800">UNLOCK</a><div class="dim" style="font-size:9.5px">'+esc(L.ts||"")+' · tried from '+esc(L.by||"?")+' · first login: '+esc(L.first||"?")+'</div>':'<span class="ok">free</span> <a data-u="'+i+'" style="cursor:pointer;color:var(--ac);font-weight:800;font-size:10px" title="Force-remove any lock file for this ID">unlock</a>')+'</td><td><span class="sw'+(x.active?" on":"")+'" data-a="'+i+'"></span></td><td><span data-r="'+i+'" style="cursor:pointer" title="Reset password to the default (user must set a new one)">↺</span> &nbsp; <span data-e="'+i+'" style="cursor:pointer">✎</span> &nbsp; <span data-d="'+i+'" class="er" style="cursor:pointer">🗑</span></td></tr>';}).join("");
   $("uTable").querySelectorAll("[data-a]").forEach(s=>s.onclick=async()=>{const x=S.cfg.users[+s.dataset.a];x.active=!x.active;await saveConfig();renderUsers();});
   $("uTable").querySelectorAll("[data-r]").forEach(s=>s.onclick=async()=>{const x=S.cfg.users[+s.dataset.r];x.pass="";try{await removeFile(await cdir("Resets"),safeN(x.msid)+".json");}catch(e){}if(S.resets)delete S.resets[safeN(x.msid)];await saveConfig();renderUsers();toast("Password of "+x.msid+" reset to the default. The user must set a new one at the next login.","ok");});
   $("uTable").querySelectorAll("[data-e]").forEach(s=>s.onclick=()=>{const x=S.cfg.users[+s.dataset.e];$("uM").value=x.msid;$("uC").value=x.pc;$("uP").value=x.pass;$("uR").value=x.role||"user";});
@@ -1183,6 +1188,9 @@ function bindAdmin(){
   $("uSave").onclick=async()=>{const m=$("uM").value.trim();if(!m){toast("MSID is empty.","bad");return;}const pc=$("uC").value.trim().toUpperCase(),pw=$("uP").value.trim();
     const x=S.cfg.users.find(u=>u.msid.toLowerCase()===m.toLowerCase());const role=$("uR").value,prev=x?x.pass:"";if(x){x.pc=pc;x.pass=pw;x.role=role;}else S.cfg.users.push({msid:m,pc:pc,pass:pw,role:role,active:true});if(pw&&pw!==prev){try{await removeFile(await cdir("Resets"),safeN(m)+".json");}catch(e){}}
     await saveConfig();$("uM").value=$("uC").value=$("uP").value="";$("uR").value="user";S.usig="";renderUsers();toast("Saved.","ok");};
+  const paintDup=()=>{const b=$("btnDupLock");if(b&&S.cfg)b.textContent="DUPLICATE-LOGIN LOCK: "+(S.cfg.dupLock===false?"OFF":"ON");};paintDup();
+  $("btnDupLock").onclick=async()=>{if(!S.cfg)return;S.cfg.dupLock=(S.cfg.dupLock===false);await saveConfig(true);paintDup();hlog(S.user,"DUP LOCK",S.cfg.dupLock===false?"OFF":"ON");toast(S.cfg.dupLock===false?"Duplicate-login lock OFF - nobody gets locked.":"Duplicate-login lock ON (a lock clears itself after "+(S.cfg.lockMin||30)+" min).","ok");};
+  $("btnUnlockAll").onclick=async()=>{let n=0;for(const d of ["Locks","Sessions"]){try{const D=await cdir(d);const names=[];for await(const [nm,h] of D.entries()){if(h.kind==="file")names.push(nm);}for(const nm of names){await removeFile(D,nm);if(d==="Locks")n++;}}catch(e){}}S.locks={};S.usig="";hlog(S.user,"UNLOCK ALL",n+" lock(s) removed");renderUsers();toast("All IDs unlocked ("+n+" lock file(s) removed).","ok");};
   $("btnUPush").onclick=async()=>{await pushExcel();hlog(S.user,"PUSH USERS",S.cfg.users.filter(u=>u.active).length+" users");toast("User list written for Excel.","ok");};
   $("btnUPaste").onclick=()=>askText("Paste the list (MSID, computer name, password optional - tab or comma separated, one person per line)",async t=>{
     let n=0;t.split(/\r?\n/).forEach(l=>{const p=l.split(/\t|,|;/).map(s=>s.trim());if(!p[0]||/^msid$/i.test(p[0]))return;const x=S.cfg.users.find(u=>u.msid.toLowerCase()===p[0].toLowerCase());
