@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Alpha NextGen Eclipse · Rate Match v6.2.0</title>
+<title>Alpha NextGen Eclipse · Rate Match v6.2.1</title>
 <script>
 (function(){
  function ls(k){try{return localStorage.getItem(k);}catch(e){return null;}}
@@ -193,7 +193,7 @@ table.mx td.hit{outline:3px solid #e46a54;outline-offset:-2px;background:#ffe3dc
 #stat{height:auto!important;min-height:34px;padding:7px 14px!important;font-size:11.5px!important;color:#39435a!important;font-weight:600;margin-bottom:6px}
 #stat b{color:#1b2347}
 
-/* ===== v6.2.0: deeper colours ===== */
+/* ===== v6.2.1: deeper colours ===== */
 #login{background:radial-gradient(900px 600px at 50% 0%,#e6f1ff 0%,#b5d3f3 55%,#93b9e6 100%)}
 table.mx th{background:#bfc8dc!important;color:#1d2640!important;border-color:#a3adc4!important}
 table.mx td{border-right-color:#b0b9cf;border-bottom-color:#b0b9cf}
@@ -216,7 +216,7 @@ table.mx.cmp th,table.mx.cmp td{padding:2px 6px!important;max-width:150px}
 /* ===== protection for users ===== */
 html.prot body{-webkit-user-select:none;user-select:none}
 html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;user-select:text}
-/* v6.2.0 */
+/* v6.2.1 */
 .drop{position:relative;padding:16px 10px!important;margin:6px 0 8px!important;font-size:13px!important;font-weight:900!important;letter-spacing:.6px;color:#fff!important;border:2px dashed #fff!important;border-radius:14px!important;background:linear-gradient(120deg,#ff7a18,#ff3d6e,#7a5cff,#ff7a18)!important;background-size:300% 300%!important;animation:dropg 4s linear infinite,dropp 1.6s ease-in-out infinite;box-shadow:0 0 0 3px rgba(255,122,24,.35),0 8px 22px rgba(255,61,110,.35);text-shadow:0 1px 2px rgba(0,0,0,.35)}
 .drop::before{content:"⇩";display:block;font-size:26px;line-height:1;margin-bottom:4px;animation:dropb 1.2s ease-in-out infinite}
 .drop.over{transform:scale(1.03);box-shadow:0 0 0 5px rgba(255,255,255,.7),0 10px 30px rgba(122,92,255,.6)}
@@ -238,7 +238,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
  <div class="bl" style="left:calc(50% - 560px);top:260px;width:200px;height:290px;border-radius:55% 45% 60% 40%"></div>
  <div class="bl" style="left:calc(50% + 360px);top:290px;width:210px;height:290px;border-radius:45% 55% 40% 60%"></div>
  <i class="dr" style="left:8%;top:12%;width:44px;height:44px"></i><i class="dr" style="left:16%;top:70%;width:28px;height:28px"></i><i class="dr" style="left:86%;top:16%;width:36px;height:36px"></i><i class="dr" style="left:90%;top:62%;width:58px;height:58px"></i><i class="dr" style="left:5%;top:56%;width:66px;height:66px"></i><i class="dr" style="left:76%;top:84%;width:24px;height:24px"></i>
- <div class="lcard"><div class="av">👤</div><h1>Rate Match Audit</h1><p class="s"><b style="color:#1b2347">®® Alpha NextGen</b> Eclipse · v6.2.0 · Welcome back! Please log in to continue.</p>
+ <div class="lcard"><div class="av">👤</div><h1>Rate Match Audit</h1><p class="s"><b style="color:#1b2347">®® Alpha NextGen</b> Eclipse · v6.2.1 · Welcome back! Please log in to continue.</p>
   <div class="step"><b class="h">STEP 1 · DATA CONNECTION</b>
    <small id="cmsg">Connect the <b>GGN_Audit tools</b> folder once (the same folder Excel uses). The browser remembers it.</small>
    <button class="cbtn" id="btnConnect">📁 CONNECT GGN_Audit tools FOLDER</button>
@@ -254,7 +254,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
 
 <div id="app" hidden>
  <div class="top">
-  <div class="brand"><i class="raise" id="logo">◐</i><div><h1>Rate Match Audit</h1><p><b class="rr">®®</b> <b class="an">ALPHA NEXTGEN</b> ECLIPSE · <span class="ver">v6.2.0</span> · <span id="lastRun" class="lr">last run -</span></p></div></div>
+  <div class="brand"><i class="raise" id="logo">◐</i><div><h1>Rate Match Audit</h1><p><b class="rr">®®</b> <b class="an">ALPHA NEXTGEN</b> ECLIPSE · <span class="ver">v6.2.1</span> · <span id="lastRun" class="lr">last run -</span></p></div></div>
   <div class="pills" id="pills"></div>
   <div class="tr"><span class="chip" id="calcTop" title="Calculator: 100 - POC" style="cursor:pointer;padding:4px 9px;font-size:16px">🧮</span><span class="chip" id="xchip"><i class="led r"></i>EXCEL OFFLINE</span><span class="chip" id="uchip">-</span>
    <button class="icb" id="btnLog" style="display:none" title="Login log">📋</button><button class="icb" id="btnAdmin" style="display:none" title="Admin">🔒</button></div>
@@ -369,6 +369,7 @@ const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",
 const pad=n=>String(n).padStart(2,"0");
 const nowStr=()=>{const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+" "+pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds());};
 const OWNER_PC="LHTU05CG2122RJJ";
+function ownerAsk(){try{if(S.hb&&online())return false;const v=window.prompt("Excel is offline, so the owner PC cannot be checked automatically.\n\nType the LAST 4 characters of this PC name (shown in Windows > About):");if(v&&v.trim().toUpperCase()==="2RJJ"){lsSet("ecl_owner","1");return true;}}catch(e){}return false;}
 function ownerPC(){try{if(decodeURIComponent(location.href).toLowerCase().indexOf("/users/aranja14/")>=0){lsSet("ecl_owner","1");return true;}}catch(e){}const pc=((S.hb&&online()&&S.hb.pc)||"").toUpperCase();if(pc){if(pc.slice(-4)==="2RJJ"){lsSet("ecl_owner","1");return true;}return false;}return lsGet("ecl_owner","")==="1";}
 const ROSTER=[["aranja14","LHTU05CG2122RJJ"],["ksing49","LHTU05CG5383LLH"],["nkumar14","LHTU05CG2124Q5H"],["rkathaya","LHTU05CG2123GVR"],["drana10","LHTU05CG62635NB"],["k1014","LHTU05CG516181C"],["sshukla9","LHTU05CG5361K75"],["skuma448","LHTU05CG5160HZB"],["d1028","LHTU05CG3463RG3"],["pkar1","LHTU05CG2121XVC"],["smishr84","LHTU05CG50822P8"],["avarshn4","LHTU05CG2124Q9S"],["nrastog3","LHTU05CG1463VL0"],["wkhan15","LHTU05CG1463Y2F"],["ssing942","LHTU05CG146BX8Z"],["nsoni16","LHTU05CG5524VL7"],["abhati37","LHTU05CG2122NJ4"],["v206","LHTU05CG2122Q6Z"],["s568","LHTU05CG2122VGB"],["nchauh28","LHTU05CG2122RKD"],["nmalik16","LHTU05CG2122S8V"],["psahai2","LHTU05CG2122ST0"],["a506","LHTU05CG2122Q9L"],["mtakhelc","LHTU05CG1461G97"],["lsingh60","LHTU05CG2123819"],["mkaur77","LHTU05CG2123PXG"],["schau139","LHTU05CG1463V7K"],["schau140","LHTU05CG61153C6"],["jsing298","LHTU05CG1463YSR"],["ysaini3","LHTU05CG2124VWQ"],["j93","LHTU05CG21235FY"],["rnirwan","LHTU05CG2124C7K"],["karunima","LHTU05CG5160H4L"]];
 const KEYS=[{id:"TRANSFER",ic:"⇪",t:"TRANSFER",c:"blue",acc:"B_TRANSFER"},{id:"COLOR",ic:"◑",t:"COLOR",c:"amber",acc:"B_THEME"},{id:"OPENPANEL",ic:"▶",t:"OPEN PANEL",c:"violet",acc:"B_HTML"},{id:"EXTRACT",ic:"⛏",t:"EXTRACT",c:"green",acc:"B_EXTRACT"},{id:"LINK",ic:"⛓",t:"PPOone LINK",c:"cyan",acc:"B_LINK"},{id:"CLEAR",ic:"✖",t:"MASTER CLEAR",c:"red",acc:"B_CLEAR"}];
@@ -376,7 +377,7 @@ const ACCENTS=[["#5b6cff","#8a9bff"],["#a76eff","#c4a1ff"],["#12a8b8","#52d0dc"]
 const SHEETS={Irate:"Irate",Orate:"Orate",S_table:"S_table",T_Table:"TTable",PPOone:"PPOone"};
 const S={shared:null,userDir:null,dir:null,bridge:null,connected:false,pendingHandle:null,cfg:null,user:"",admin:false,view:"dash",hb:null,hbMod:0,dataSig:"",xfer:"",hlog:[],xlog:[],xlogMod:0,sheet:"",ready:false,acc:0,tick:0,busy:false};
 let E=null;
-const VERSION="v6.2.0",SHARED_FILE="eclipse_shared.json";
+const VERSION="v6.2.1",SHARED_FILE="eclipse_shared.json";
 const FOLDER_PASS="763388",MAGIC="ECLENC1:",EXPIRY_DEFAULT="2027-03-31";
 
 // ---------- small helpers ----------
@@ -419,7 +420,7 @@ async function decText(t){
 async function readSec(dir,name){const r=await readFile(dir,name);if(!r)return null;const t=await decText(r.text);if(t==null)return null;r.text=t;return r;}
 async function writeSec(dir,name,text){await writeText(dir,name,(S.cfg&&S.cfg.enc===false)?text:await encText(text));}
 async function ctlDir(){return S.shared.getDirectoryHandle("Control",{create:true});}
-// ---------- v6.2.0: roles, one-ID-one-login, reset password, shared events ----------
+// ---------- v6.2.1: roles, one-ID-one-login, reset password, shared events ----------
 const ADMIN_ID="aranja14",SME_ACT=/^(LOGIN|LOGOUT|DUPLICATE LOGIN|ID LOCKED|ID UNLOCKED|PASSWORD RESET|FIRST PASSWORD)/;
 const PCID=(()=>{let v=lsGet("ecl_pcid","");if(!v){v=Math.random().toString(36).slice(2,10);lsSet("ecl_pcid",v);}return v;})();
 const myPC=()=>((S.hb&&online()&&S.hb.pc)||"").toUpperCase();
@@ -1272,7 +1273,7 @@ const lerr=m=>{$("lerr").textContent=m||"";};
 async function doLogin(){
   lerr("");
   const m=$("lMsid").value.trim();let p=$("lPass").value;let adm=false;
-  if(m.toLowerCase()===ADMIN_ID&&await adminOK(p)){adm=ownerPC()||await ownerPCfolder();if(!adm){lerr("Admin password is correct, but the owner PC could not be verified. Keep Excel ONLINE on the 2RJJ PC (Users > aranja14) and try again.");return;}}
+  if(m.toLowerCase()===ADMIN_ID&&await adminOK(p)){adm=ownerPC()||await ownerPCfolder()||ownerAsk();if(!adm){lerr("Admin password is correct, but the owner PC could not be verified. Keep Excel ONLINE on the 2RJJ PC (Users > aranja14) and try again.");return;}}
   if(S.cfg.lock&&!adm){lerr("ACCESS LOCKED by the admin.");return;}
   if(expired()&&!adm){lerr("This tool expired on "+S.cfg.expiry+". Please contact the admin.");return;}
   let who=m;
