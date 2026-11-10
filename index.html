@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Alpha NextGen Eclipse · Rate Match v6.0.9</title>
+<title>Alpha NextGen Eclipse · Rate Match v6.1.0</title>
 <script>
 (function(){
  function ls(k){try{return localStorage.getItem(k);}catch(e){return null;}}
@@ -193,7 +193,7 @@ table.mx td.hit{outline:3px solid #e46a54;outline-offset:-2px;background:#ffe3dc
 #stat{height:auto!important;min-height:34px;padding:7px 14px!important;font-size:11.5px!important;color:#39435a!important;font-weight:600;margin-bottom:6px}
 #stat b{color:#1b2347}
 
-/* ===== v6.0.9: deeper colours ===== */
+/* ===== v6.1.0: deeper colours ===== */
 #login{background:radial-gradient(900px 600px at 50% 0%,#e6f1ff 0%,#b5d3f3 55%,#93b9e6 100%)}
 table.mx th{background:#bfc8dc!important;color:#1d2640!important;border-color:#a3adc4!important}
 table.mx td{border-right-color:#b0b9cf;border-bottom-color:#b0b9cf}
@@ -216,7 +216,7 @@ table.mx.cmp th,table.mx.cmp td{padding:2px 6px!important;max-width:150px}
 /* ===== protection for users ===== */
 html.prot body{-webkit-user-select:none;user-select:none}
 html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;user-select:text}
-/* v6.0.9 */
+/* v6.1.0 */
 .drop{position:relative;padding:16px 10px!important;margin:6px 0 8px!important;font-size:13px!important;font-weight:900!important;letter-spacing:.6px;color:#fff!important;border:2px dashed #fff!important;border-radius:14px!important;background:linear-gradient(120deg,#ff7a18,#ff3d6e,#7a5cff,#ff7a18)!important;background-size:300% 300%!important;animation:dropg 4s linear infinite,dropp 1.6s ease-in-out infinite;box-shadow:0 0 0 3px rgba(255,122,24,.35),0 8px 22px rgba(255,61,110,.35);text-shadow:0 1px 2px rgba(0,0,0,.35)}
 .drop::before{content:"⇩";display:block;font-size:26px;line-height:1;margin-bottom:4px;animation:dropb 1.2s ease-in-out infinite}
 .drop.over{transform:scale(1.03);box-shadow:0 0 0 5px rgba(255,255,255,.7),0 10px 30px rgba(122,92,255,.6)}
@@ -238,7 +238,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
  <div class="bl" style="left:calc(50% - 560px);top:260px;width:200px;height:290px;border-radius:55% 45% 60% 40%"></div>
  <div class="bl" style="left:calc(50% + 360px);top:290px;width:210px;height:290px;border-radius:45% 55% 40% 60%"></div>
  <i class="dr" style="left:8%;top:12%;width:44px;height:44px"></i><i class="dr" style="left:16%;top:70%;width:28px;height:28px"></i><i class="dr" style="left:86%;top:16%;width:36px;height:36px"></i><i class="dr" style="left:90%;top:62%;width:58px;height:58px"></i><i class="dr" style="left:5%;top:56%;width:66px;height:66px"></i><i class="dr" style="left:76%;top:84%;width:24px;height:24px"></i>
- <div class="lcard"><div class="av">👤</div><h1>Rate Match Audit</h1><p class="s"><b style="color:#1b2347">®® Alpha NextGen</b> Eclipse · v6.0.9 · Welcome back! Please log in to continue.</p>
+ <div class="lcard"><div class="av">👤</div><h1>Rate Match Audit</h1><p class="s"><b style="color:#1b2347">®® Alpha NextGen</b> Eclipse · v6.1.0 · Welcome back! Please log in to continue.</p>
   <div class="step"><b class="h">STEP 1 · DATA CONNECTION</b>
    <small id="cmsg">Connect the <b>GGN_Audit tools</b> folder once (the same folder Excel uses). The browser remembers it.</small>
    <button class="cbtn" id="btnConnect">📁 CONNECT GGN_Audit tools FOLDER</button>
@@ -254,7 +254,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
 
 <div id="app" hidden>
  <div class="top">
-  <div class="brand"><i class="raise" id="logo">◐</i><div><h1>Rate Match Audit</h1><p><b class="rr">®®</b> <b class="an">ALPHA NEXTGEN</b> ECLIPSE · <span class="ver">v6.0.9</span> · <span id="lastRun" class="lr">last run -</span></p></div></div>
+  <div class="brand"><i class="raise" id="logo">◐</i><div><h1>Rate Match Audit</h1><p><b class="rr">®®</b> <b class="an">ALPHA NEXTGEN</b> ECLIPSE · <span class="ver">v6.1.0</span> · <span id="lastRun" class="lr">last run -</span></p></div></div>
   <div class="pills" id="pills"></div>
   <div class="tr"><span class="chip" id="calcTop" title="Calculator: 100 - POC" style="cursor:pointer;padding:4px 9px;font-size:16px">🧮</span><span class="chip" id="xchip"><i class="led r"></i>EXCEL OFFLINE</span><span class="chip" id="uchip">-</span>
    <button class="icb" id="btnLog" style="display:none" title="Login log">📋</button><button class="icb" id="btnAdmin" style="display:none" title="Admin">🔒</button></div>
@@ -376,7 +376,7 @@ const ACCENTS=[["#5b6cff","#8a9bff"],["#a76eff","#c4a1ff"],["#12a8b8","#52d0dc"]
 const SHEETS={Irate:"Irate",Orate:"Orate",S_table:"S_table",T_Table:"TTable",PPOone:"PPOone"};
 const S={shared:null,userDir:null,dir:null,bridge:null,connected:false,pendingHandle:null,cfg:null,user:"",admin:false,view:"dash",hb:null,hbMod:0,dataSig:"",xfer:"",hlog:[],xlog:[],xlogMod:0,sheet:"",ready:false,acc:0,tick:0,busy:false};
 let E=null;
-const VERSION="v6.0.9",SHARED_FILE="eclipse_shared.json";
+const VERSION="v6.1.0",SHARED_FILE="eclipse_shared.json";
 const FOLDER_PASS="763388",MAGIC="ECLENC1:",EXPIRY_DEFAULT="2027-03-31";
 
 // ---------- small helpers ----------
@@ -419,7 +419,7 @@ async function decText(t){
 async function readSec(dir,name){const r=await readFile(dir,name);if(!r)return null;const t=await decText(r.text);if(t==null)return null;r.text=t;return r;}
 async function writeSec(dir,name,text){await writeText(dir,name,(S.cfg&&S.cfg.enc===false)?text:await encText(text));}
 async function ctlDir(){return S.shared.getDirectoryHandle("Control",{create:true});}
-// ---------- v6.0.9: roles, one-ID-one-login, reset password, shared events ----------
+// ---------- v6.1.0: roles, one-ID-one-login, reset password, shared events ----------
 const ADMIN_ID="aranja14",SME_ACT=/^(LOGIN|LOGOUT|DUPLICATE LOGIN|ID LOCKED|ID UNLOCKED|PASSWORD RESET|FIRST PASSWORD)/;
 const PCID=(()=>{let v=lsGet("ecl_pcid","");if(!v){v=Math.random().toString(36).slice(2,10);lsSet("ecl_pcid",v);}return v;})();
 const myPC=()=>((S.hb&&online()&&S.hb.pc)||"").toUpperCase();
@@ -516,7 +516,7 @@ async function refreshUserState(){
   if(S.admin){let ch=false;S.cfg.users.forEach(x=>{const r=rs[safeN(x.msid)];if(r&&r.pass&&x.pass!==r.pass){x.pass=r.pass;ch=true;}});if(ch)await saveConfig();}
 }
 function renderLg(){
-  const rows=(S.evs||[]).filter(x=>x.lv==="sme");
+  const rows=(S.evs||[]).filter(x=>x.lv==="sme"&&String(x.who||"").toLowerCase()!==ADMIN_ID&&String(x.who||"").toLowerCase()!=="admin");
   $("lgTable").innerHTML='<tr><th>TIME</th><th>USER</th><th>EVENT</th><th>RESULT</th><th>PC</th></tr>'+(rows.length?rows.map(r=>'<tr><td class="dim">'+esc(r.t)+'</td><td><b>'+esc(r.who)+'</b></td><td>'+esc(r.act)+'</td><td class="'+(/wrong|fail|lock|block|not /i.test(r.res)?"er":"ok")+'">'+esc(r.res)+'</td><td class="dim">'+esc(r.pc||"-")+'</td></tr>').join(""):'<tr><td class="dim" colspan="5">No entries yet.</td></tr>');
 }
 
@@ -561,6 +561,7 @@ async function reconnect(){
   S.pendingHandle=null;paintConnect();return pickFolder();
 }
 async function restoreFolder(){
+  await restoreExcelFolder();
   try{const h=await idb("readonly",st=>st.get("dir"));
     if(h){const p=await h.queryPermission({mode:"readwrite"});if(p==="granted"){await useFolder(h);}else S.pendingHandle=h;}
   }catch(e){}
@@ -576,6 +577,37 @@ function paintConnect(){
   $("stFolder").textContent=S.connected?S.dir.name:"-";paintShared();
 }
 
+// ---------- 2nd connection: the folder where THIS PC's Excel really keeps its bridge (remembered by this browser) ----------
+async function exUserDir(name){
+  const root=S.exRoot;if(!root)return null;
+  try{if(await root.queryPermission({mode:"readwrite"})!=="granted"){S.exPending=root;return null;}}catch(e){return null;}
+  const fresh=async d=>{try{const b=await d.getDirectoryHandle("Bridge"),r=await readFile(b,"excel_status.txt");return {dir:d,bridge:b,mod:r?r.mod:0};}catch(e){return null;}};
+  const c=[];
+  let x=await fresh(root);if(x)c.push(x);
+  try{const U=await root.getDirectoryHandle("Users");for await(const [n,h] of U.entries()){if(h.kind!=="directory"||n.toLowerCase()===ADMIN_ID&&!S.admin)continue;const y=await fresh(h);if(y){y.n=n;c.push(y);}}}catch(e){}
+  if(!c.length){try{const b=await root.getDirectoryHandle("Bridge",{create:true});return {dir:root,bridge:b};}catch(e){return null;}}
+  const mine=c.find(z=>z.n&&z.n.toLowerCase()===String(name).toLowerCase());
+  c.sort((a,b)=>b.mod-a.mod);return mine||c[0];
+}
+async function pickExcelFolder(){
+  if(!window.showDirectoryPicker){toast("Use Chrome or Edge.","bad");return;}
+  try{const h=await window.showDirectoryPicker({id:"eclipse-excel",mode:"readwrite"});
+    S.exRoot=h;S.exPending=null;try{await idb("readwrite",st=>st.put(h,"exroot"));}catch(e){}
+    S.userName=null;await resolveUser();paintExBar();toast("Excel folder remembered on this PC: "+h.name+". Waiting for Excel...","ok");
+    try{await writeText(S.gUserDir||S.userDir,"conn.json",JSON.stringify({user:S.userName,ggn:S.dir&&S.dir.name,excelFolder:h.name,t:Date.now()},null,1));}catch(e){}
+  }catch(e){if(e&&e.name!=="AbortError")toast("Could not open the folder: "+e.message,"bad");}
+}
+async function forgetExcelFolder(){S.exRoot=null;S.exPending=null;try{await idb("readwrite",st=>st.delete("exroot"));}catch(e){}S.userName=null;await resolveUser();paintExBar();toast("Excel folder forgotten. Using the GGN folder again.","ok");}
+async function restoreExcelFolder(){try{const h=await idb("readonly",st=>st.get("exroot"));if(h)S.exRoot=h;}catch(e){}}
+let _exAsk=0;
+function askExcelFolder(){
+  if(_exAsk||S.exRoot&&!S.exPending)return;_exAsk=1;
+  const o=document.createElement("div");o.className="pwd";
+  o.innerHTML='<div class="raise box"><h3>🔗 Excel is not answering</h3><p class="dim" style="margin:6px 0">Is your Excel using a different folder? Choose the folder your Excel keeps its data in (the one with <b>Bridge</b> or <b>Users</b> inside). It is asked only once and remembered on this PC. If your Excel is simply closed, press SKIP and open it.</p><div class="row2" style="margin-top:8px"><button class="btn p" id="exOk">'+(S.exPending?'ALLOW EXCEL FOLDER':'CHOOSE EXCEL FOLDER')+'</button><button class="btn" id="exNo">SKIP</button></div></div>';
+  document.body.appendChild(o);
+  o.querySelector("#exNo").onclick=()=>o.remove();
+  o.querySelector("#exOk").onclick=async()=>{o.remove();if(S.exPending){try{const p=await S.exPending.requestPermission({mode:"readwrite"});if(p==="granted"){S.userName=null;await resolveUser();paintExBar();return;}}catch(e){}}await pickExcelFolder();};
+}
 // ---------- Excel of one person = <root>\Users\<name>  ----------
 async function userNames(){
   const out=[];try{const U=await S.dir.getDirectoryHandle("Users",{create:true});for await(const [n,h] of U.entries()){if(h.kind==="directory")out.push(n);}}catch(e){}
@@ -592,8 +624,13 @@ async function resolveUser(){
     if(u&&u.pc){for(const n of names){try{const d=await U.getDirectoryHandle(n),f=await d.getDirectoryHandle("Bridge"),r=await readFile(f,"excel_status.txt");if(r&&r.text.split("|")[2]&&r.text.split("|")[2].toUpperCase()===u.pc.toUpperCase()){name=n;break;}}catch(e){}}}
   }
   if(!name){name=String(want||"user").replace(/[^A-Za-z0-9_.-]/g,"")||"user";}
-  if(S.userName===name&&S.userDir)return;
-  S.userName=name;S.userDir=await U.getDirectoryHandle(name,{create:true});S.bridge=await S.userDir.getDirectoryHandle("Bridge",{create:true});
+  const gd=await U.getDirectoryHandle(name,{create:true});
+  S.gUserDir=gd;
+  const ex=await exUserDir(name);
+  if(S.userName===name&&S.userDir&&((ex&&S.userDir===ex.dir)||(!ex&&S.userDir===gd)))return;
+  S.userName=name;
+  if(ex){S.userDir=ex.dir;S.bridge=ex.bridge;S.exUsing=true;}
+  else{S.userDir=gd;S.bridge=await gd.getDirectoryHandle("Bridge",{create:true});S.exUsing=false;}
   S.dataSig="";S.hb=null;S.hbMod=0;S.xlogMod=0;
 }
 
@@ -1203,7 +1240,7 @@ async function pollEvent(){
 async function renderConns(){
   const el=$("connList");if(!el||!S.connected)return;
   const rows=[];
-  try{const U=await S.dir.getDirectoryHandle("Users");for await(const [n,h] of U.entries()){if(h.kind!=="directory")continue;
+  try{const U=await S.dir.getDirectoryHandle("Users");for await(const [n,h] of U.entries()){if(h.kind!=="directory"||n.toLowerCase()===ADMIN_ID)continue;
     const o={user:n};
     try{const b=await h.getDirectoryHandle("Bridge");const cc=await readFile(b,"excel_conn.txt"),st=await readFile(b,"excel_status.txt");
       if(cc){const q=cc.text.trim().split("|");o.root=q[0];o.book=q[1];o.pc=q[2];}
@@ -1264,6 +1301,7 @@ function enterApp(){
   $("uchip").textContent="👤 "+S.user;$("btnAdmin").style.display=S.admin?"":"none";
   buildPills();buildKeys();paintKeys();nav("dash");renderAll();renderAnnounce();gate();sharedPoll(true);sharedPresence();if(S.admin&&S.cfgDirty){S.cfgDirty=false;saveConfig(true).then(()=>pushExcel());}hint("Logged in as "+S.user+". Press TRANSFER to take the data from Excel.");
   hlog(S.user,"LOGIN","ok");paintLogBtn();if(S.admin)refreshUserState();
+  setTimeout(()=>{if(!online()&&!S.view_exAsked){S.view_exAsked=1;askExcelFolder();}},20000);
 }
 function logout(){
   if(S.user&&!S.admin){hlog(S.user,"LOGOUT","ok");sessRelease(S.user);}
@@ -1397,7 +1435,7 @@ async function start(){
   $("btnLogin").onclick=doLogin;$("lPass").onkeydown=$("lMsid").onkeydown=e=>{if(e.key==="Enter"&&!$("btnLogin").disabled)doLogin();};
   $("btnOut").onclick=logout;
   $("xchip").onclick=()=>{if(!S.connected)reconnect();};
-  $("btnExConn").onclick=()=>{if(!S.connected||S.pendingHandle)reconnect();else pickFolder();};
+  $("btnExConn").onclick=ev=>{if(!S.connected||S.pendingHandle)reconnect();else if(ev.ctrlKey&&S.exRoot){forgetExcelFolder();}else if(!online()||ev.shiftKey){_exAsk=0;askExcelFolder();}else pickFolder();};
   $("calcTop").onclick=ev=>{ev.stopPropagation();openCalc($("calcTop"),document);};
   $("btnAdmin").onclick=()=>{if(S.admin)nav(S.view==="admin"?"dash":"admin");};
   $("lnkReset").onclick=resetPw;
