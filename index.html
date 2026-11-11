@@ -320,7 +320,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
      <div class="fr"><input class="field" id="inMk" placeholder="Market"><input class="field" id="inOp" placeholder="OPS Tbl #"></div>
      <div class="tk"><label><input type="checkbox" id="tkT" checked> T_Table</label><label><input type="checkbox" id="tkI" checked> Irate</label><label><input type="checkbox" id="tkS"> S_Table</label><label><input type="checkbox" id="tkO"> Orate</label></div></div>
     <div class="raise card"><div class="l"><span>AUTOMATION</span></div>
-     <div class="ctl"><span>Auto MASTER TALLY when PPOone + data are in</span><span class="sw on" id="swAuto"></span></div>
+     <div class="ctl"><span>Auto MASTER TALLY when PPOone + data are in</span><span class="sw" id="swAuto" title="Works only when the admin has switched AUTO AUDIT ON"></span></div>
      <div class="ctl"><span>Open PPOone link after data comes in</span><span class="sw on" id="swLink"></span></div>
      <div class="ctl"><span>PPOone data</span><span><button class="btn p" id="btnPpoPaste" style="padding:4px 12px">⇩ PASTE</button></span></div>
      <div class="drop" id="ppoDrop">⇩ DROP PPOone FILE HERE &nbsp;(xlsx / csv / txt) &nbsp;or click</div><input type="file" id="ppoFile" hidden accept=".xlsx,.xlsm,.csv,.tsv,.txt">
@@ -347,7 +347,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
   <section class="view" id="v-admin"><div class="vwrap">
    <div class="sub" id="asub"></div>
    <div class="apane" id="ap-users">
-    <div class="raise card col" style="flex:1;min-height:0"><div class="l"><span id="uHead">USERS</span><span><button class="btn" id="btnUImp">⇩ IMPORT FROM EXCEL</button> <button class="btn" id="btnUPaste">⇩ PASTE LIST</button> <button class="btn p" id="btnUPush">⇪ PUSH TO EXCEL</button> <button class="btn" id="btnUnlockAll">🔓 UNLOCK ALL IDs</button> <button class="btn" id="btnDupLock">DUPLICATE-LOGIN LOCK</button></span></div>
+    <div class="raise card col" style="flex:1;min-height:0"><div class="l"><span id="uHead">USERS</span><span><button class="btn" id="btnUImp">⇩ IMPORT FROM EXCEL</button> <button class="btn" id="btnUPaste">⇩ PASTE LIST</button> <button class="btn p" id="btnUPush">⇪ PUSH TO EXCEL</button> <button class="btn" id="btnUnlockAll">🔓 UNLOCK ALL IDs</button> <button class="btn" id="btnDupLock">DUPLICATE-LOGIN LOCK</button> <button class="btn" id="btnAutoAud">AUTO AUDIT</button></span></div>
      <div style="flex:1;min-height:0;overflow:auto"><table class="t" id="uTable"></table></div></div>
     <div class="raise card col" style="width:300px;flex:none"><div class="l">ADD / EDIT USER</div>
      <input class="field" id="uM" placeholder="MSID  (e.g. nkumar14)"><input class="field" id="uC" placeholder="Computer name  (optional)"><input class="field" id="uP" placeholder="Password  (empty = last 4 of MSID)"><select class="field" id="uR"><option value="user">Role: USER</option><option value="sme">Role: SME</option><option value="manager">Role: MANAGER</option></select>
@@ -592,7 +592,7 @@ async function useFolder(h0){
   let h=await findGgn(h0,2);
   if(!h){toast("This is not the GGN_Audit tools folder. Choose the folder named GGN_Audit tools (or the folder that contains it). Nothing was created.","bad");return;}
   if(h!==h0)toast("Using the folder  "+h.name+"  inside "+h0.name,"ok");
-  S.dir=h;S.shared=h;S.connected=true;S.dataSig="";
+  S.dir=h;S.shared=h;S.connected=true;S.dataSig="";S.dataHash="";
   try{await idb("readwrite",st=>st.put(h,"dir"));}catch(e){}
   await loadConfig();paintConnect();
 }
@@ -685,7 +685,7 @@ async function resolveUser(){
   S.userName=name;
   if(ex){S.userDir=ex.dir;S.bridge=ex.bridge;S.exUsing=true;}
   else{S.userDir=gd;S.bridge=await gd.getDirectoryHandle("Bridge",{create:true});S.exUsing=false;}
-  S.dataSig="";S.hb=null;S.hbMod=0;S.xlogMod=0;
+  S.dataSig="";S.dataHash="";S.hb=null;S.hbMod=0;S.xlogMod=0;
 }
 
 // ---------- config (one file in the GGN folder: eclipse_shared.json) ----------
@@ -724,6 +724,39 @@ const CORE_RULES=[
  {id:"core_t_opg",scope:"GRP::"+TSG.replace(/ \| $/,""),col:"SVC CAT (S)",col2:"SVC CAT (T)",op:"pair",val:"OPG",mode:"row",note:"T-TABLE: only OPG is audited (OPG in S and T = green, in one = red, in neither = grey)"}
 ].map(r=>Object.assign({on:true,core:true},r));
 function defCfg(){return {adminHash:null,users:ROSTER.map(r=>({msid:r[0],pc:r[1],pass:"",active:true})),disabled:[],expiry:EXPIRY_DEFAULT,expRev:607,enc:true,protect:true,requireLogin:true,lock:false,announce:{on:false,text:"",dir:"ltr"},rules:DEF_RULES(),rulesVer:0,v:0};}
+
+// ---- 17 PINNED rules: always ON for everybody until the admin switches one off / deletes it (with the rules password) ----
+const OSGp=OSG,TSGp=TSG;
+const PINS=[
+ {scope:TSGp+"MP2 / MP3 / OCCUR / PROC / HCPC",col:"MP3%",op:"blank",val:"",mode:"cell",note:"MP3% is blank = no error (only the MP3% cell is skipped, MP2% is still audited)"},
+ {scope:TSGp+"MP2 / MP3 / OCCUR / PROC / HCPC",col:"MP2%",col2:"MP3%",op:"bothblank",val:"",mode:"row",note:"MP2% and MP3% both blank = no error (whole row skipped)"},
+ {scope:"GRP::IRATE  VS  PPOone",col:"*",op:"in",val:"00795,0795,795",mode:"row",note:"IRATE (all checks): a row with DRG 00795 is not audited (this code keeps changing)"},
+ {scope:OSGp+"GRP IND 01",col:"RU",op:"in",val:"F,F1,F2",mode:"row",note:"GRP IND 01: RU = F1,F,F2 row not tallied"},
+ {scope:OSGp+"GRP IND 02",col:"RU",op:"in",val:"F,F1,F2",mode:"row",note:"GRP IND 02: RU = F1,F,F2 row not tallied"},
+ {scope:OSGp+"NO GROUP",col:"RU",op:"in",val:"F,F1,F2",mode:"row",note:"NO GROUP: RU = F1,F,F2 row not tallied"},
+ {scope:OSGp+"GRP IND 01",col:"PROC FRM",op:"in",val:"0001A,A0000",mode:"row",note:"GRP IND 01: PROC FRM 0001A / A0000 is not tallied"},
+ {scope:OSGp+"GRP IND 01",col:"PROC TO",op:"in",val:"99999,Z2502",mode:"row",note:"GRP IND 01: PROC TO 99999 / Z2502 is not tallied"},
+ {scope:OSGp+"GRP IND 02",col:"PROC FRM",op:"in",val:"0001A,A0000",mode:"row",note:"GRP IND 02: PROC FRM 0001A / A0000 not tallied"},
+ {scope:OSGp+"GRP IND 02",col:"PROC TO",op:"in",val:"99999,Z2502",mode:"row",note:"GRP IND 02: PROC TO 99999 / Z2502 not tallied"},
+ {scope:OSGp+"NO GROUP",col:"PROC FRM",op:"in",val:"0001A,A0000",mode:"row",note:"NO GROUP: PROC FRM 0001A / A0000 not tallied"},
+ {scope:OSGp+"NO GROUP",col:"PROC TO",op:"in",val:"99999,Z2502",mode:"row",note:"NO GROUP: PROC TO 99999 / Z2502 not tallied"},
+ {scope:OSGp+"GRP IND 01",col:"SVC CAT (S)",op:"in",val:"OPG",mode:"row",note:"[GRP IND 01] OPG row not tallied"},
+ {scope:OSGp+"GRP IND 02",col:"SVC CAT (S)",op:"in",val:"OPG",mode:"row",note:"[GRP IND 02] OPG row not tallied"},
+ {scope:OSGp+"NO GROUP",col:"SVC CAT (S)",op:"in",val:"OPG",mode:"row",note:"[NO GROUP] OPG row not tallied"},
+ {scope:OSGp+"STABLE SVC / ORATE SVC",col:"SVC CAT (S)",op:"in",val:"OPG",mode:"cell",note:"[STABLE SVC / ORATE SVC] ONLY the OPG cell is grey, rest of the row is audited"},
+ {scope:"GRP::"+TSGp.replace(/ \| $/,""),col:"SVC CAT (S)",col2:"SVC CAT (T)",op:"pair",val:"OPG",mode:"row",note:"T-TABLE: only OPG is audited (OPG in S and T = green, in one = red, in neither = grey)"}
+];
+function psig(r){const n=x=>String(x||"").replace(/\s+/g," ").trim().toUpperCase();return [n(r.scope||"*"),n(r.col),n(r.col2),r.op,String(r.val||"").split(",").map(n).filter(Boolean).sort().join(","),r.mode==="cell"?"cell":"row"].join("|");}
+const PIN_SIGS=PINS.map(psig);
+function pinOff(sg){if(!S.cfg)return;S.cfg.pinOff=S.cfg.pinOff||[];if(S.cfg.pinOff.indexOf(sg)<0)S.cfg.pinOff.push(sg);}
+function pinOn(sg){if(S.cfg&&S.cfg.pinOff)S.cfg.pinOff=S.cfg.pinOff.filter(x=>x!==sg);}
+function enforcePins(){
+  if(!S.cfg||!Array.isArray(S.cfg.rules))return false;const off=S.cfg.pinOff||[];let ch=false;
+  PINS.forEach((p,i)=>{const sg=PIN_SIGS[i];if(off.indexOf(sg)>=0)return;const m=S.cfg.rules.filter(r=>psig(r)===sg);
+    if(!m.length){S.cfg.rules.push(Object.assign({id:"pin_"+i,on:true},p));ch=true;}
+    else m.forEach(r=>{if(r.on===false){r.on=true;ch=true;}});});
+  return ch;
+}
 function applyIgn(){
   if(!S.cfg)return;
   S.cfg.requireLogin=true;
@@ -734,6 +767,7 @@ function applyIgn(){
   if(Array.isArray(S.cfg.rules)&&(S.cfg.rulesVer||0)<10){S.cfg.rules=S.cfg.rules.filter(r=>!/^t_(opg|pair|cell|only)_/.test(r.id));S.cfg.rules.forEach(r=>{if(r.id==="tt_opg"){r.op="pair";r.col="SVC CAT (S)";r.col2="SVC CAT (T)";r.note="T-TABLE (all checks), whole column logic: only the values in the list (OPG) are audited. OPG in S and in T = green. OPG in only one column (S or T) = red error. OPG in neither = all grey. Everything else grey. To add ALT later: edit and write OPG,ALT";}});S.cfg.rules.forEach(r=>{if(r.scope===TSG+"STABLE SVC / TTABLE SVC"&&r.op!=="neither"&&/^SVC CAT \((S|T)\)$/i.test(r.col||"")&&/OPG/i.test(r.val||""))r.on=false;});const have=S.cfg.rules.map(r=>r.id);DEF_RULES().forEach(r=>{if(have.indexOf(r.id)<0)S.cfg.rules.push(r);});S.cfg.rulesVer=10;S.cfgDirty=true;}
   if(Array.isArray(S.cfg.rules)&&(S.cfg.rulesVer||0)<11){const have=S.cfg.rules.map(r=>r.id),hasT=have.indexOf("mp_blank3")>=0||have.indexOf("tt_opg")>=0;CORE_RULES.forEach(r=>{if(have.indexOf(r.id)>=0)return;if(/^core_t_/.test(r.id)&&hasT)return;const c=Object.assign({},r);delete c.core;S.cfg.rules.push(c);});S.cfg.rulesVer=11;S.cfgDirty=true;}
   if(!Array.isArray(S.cfg.rules))S.cfg.rules=Array.isArray(S.cfg.ignore)&&S.cfg.ignore.length?[{id:"r1",on:true,scope:"*",col:"SVC CAT (S)",op:"in",val:S.cfg.ignore.join(","),note:""}]:DEF_RULES();
+  if(enforcePins())S.cfgDirty=true;
   S.cfg.rules=S.cfg.rules.filter(r=>r);
   const l=S.cfg.rules.filter(r=>r.on!==false).map(r=>({id:r.id,on:true,scope:r.scope||"*",col:r.col||"",op:r.op,val:r.val||"",mode:r.mode==="cell"?"cell":"row",col2:r.col2||""}));
   const sig=JSON.stringify(l);const chg=S.ignSig!==undefined&&S.ignSig!==sig;S.ignSig=sig;S.nRules=l.length;
@@ -935,7 +969,9 @@ async function pollData(){
   const r=await readFile(S.userDir,"eclipse_data.txt");if(!r)return;
   const sig=r.mod+":"+r.size;if(sig===S.dataSig)return;
   if(r.text.indexOf("#ECLIPSE_BUNDLE")<0||!/\n@@END\s*$/.test(r.text))return;
-  S.dataSig=sig;
+  const hh=hashStr(r.text);S.dataSig=sig;
+  if(hh===S.dataHash)return;
+  S.dataHash=hh;
   try{E.ingestBundle(r.text);}catch(e){console.error(e);toast("The data file could not be read: "+e.message,"bad");}
 }
 // ---- PPOone cache: a dropped/pasted PPOone is kept (memory + browser) until a NEW one is dropped or MASTER CLEAR ----
@@ -944,13 +980,16 @@ function ppoForget(){S.ppoTxt="";S.ppoName="";try{idb("readwrite",st=>st.delete(
 function ppoMark(n,why){try{const z=$("ppoDrop");z.classList.add("ok");z.textContent="PPOone loaded ✓ · "+n+" rows · "+(why||"drop again to replace");}catch(e){}}
 function ppoRestore(quiet,force){try{if(!S.ppoTxt||!E)return false;const a=api();if(!a||(!force&&a.rows().P>0))return false;E.__doPaste({value:S.ppoTxt},"PPOone");const n=api().rows().P;if(n>0){ppoMark(n,"kept from cache");if(!quiet)hint("PPOone kept: "+n+" rows (cache)");return true;}}catch(e){console.error(e);}return false;}
 async function ppoLoadCache(){try{const v=await idb("readonly",st=>st.get("ppo"));if(v&&v.t){S.ppoTxt=v.t;S.ppoName=v.name||"";if(ppoRestore(true)){renderAll();}}}catch(e){}}
+function hashStr(t){let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return h+":"+t.length;}
+function autoOn(){return !!(S.cfg&&S.cfg.autoAudit===true&&$("swAuto").classList.contains("on"));}
+function autoAudit(key){if(!autoOn())return;const rr=api().rows();if(!(rr.P>0&&(rr.I+rr.O+rr.S+rr.T)>0))return;if(key&&key===S.lastAutoKey)return;S.lastAutoKey=key||("k"+Date.now());setTimeout(runTally,60);}
 function onIngested(info){
   ppoRestore(true,true);
   S.xfer=(info&&info.stamp)||nowStr();$("stXfer").textContent=S.xfer;
   hlog("excel","DATA RECEIVED",S.xfer+(info&&info.empt&&info.empt.length?"  (empty: "+info.empt.join(", ")+")":""));
   if(info&&info.empt&&info.empt.length)toast("Empty in Excel: "+info.empt.join(", "),"");
   renderAll();
-  if($("swAuto").classList.contains("on")){const rr=api().rows();if(rr.P>0&&(rr.I+rr.O+rr.S+rr.T)>0)setTimeout(runTally,60);}
+  autoAudit("D|"+(S.dataHash||S.dataSig));
   if(S.view==="sheet")showSheet(S.sheet);
 }
 async function runTally(){
@@ -1130,7 +1169,7 @@ async function doKey(id){
   }
   if(id==="CLEAR"){
     if(!confirm("MASTER CLEAR: all 5 sheets in Excel and this page will be cleared. Continue?"))return;
-    if(await excelCmd("CLEAR")){try{E.document.getElementById("btnClear").click();}catch(e){}api().clearAll();ppoForget();S.dataSig="";S.xfer="";$("stXfer").textContent="-";renderAll();try{const z=$("ppoDrop");z.classList.remove("ok");z.innerHTML="DROP PPOone FILE HERE &nbsp;(xlsx / csv / txt) &nbsp;or click";}catch(e){}$("progTxt").textContent="Cleared.";toast("MASTER CLEAR sent.","ok");}
+    if(await excelCmd("CLEAR")){try{E.document.getElementById("btnClear").click();}catch(e){}api().clearAll();ppoForget();S.dataSig="";S.dataHash="";S.xfer="";$("stXfer").textContent="-";renderAll();try{const z=$("ppoDrop");z.classList.remove("ok");z.innerHTML="DROP PPOone FILE HERE &nbsp;(xlsx / csv / txt) &nbsp;or click";}catch(e){}$("progTxt").textContent="Cleared.";toast("MASTER CLEAR sent.","ok");}
     return;
   }
   if(id==="LINK"){const l=api().ppoLink;if(!l){toast("No PPOone link yet - press TRANSFER once.","bad");return;}window.open(l,"ppoone");return;}
@@ -1190,8 +1229,8 @@ function renderRules(){
   $("rlOp").innerHTML=OPS.map(o=>'<option value="'+o[0]+'">'+o[1]+"</option>").join("");
   const gn=g=>String(g||"").replace(/\s+/g," ").replace(/ VS PPOone/i,"").trim();const nm=id=>{if(id==="*")return "ALL CHECKS";if(String(id).indexOf("GRP::")===0)return "ALL checks of "+gn(String(id).slice(5));const i=items.find(x=>x.grp+" | "+x.label===id);if(i)return i.label+" · "+gn(i.grp);const p=String(id).split("|");return p.length>1?p[1].trim()+" · "+gn(p[0]):id;};
   $("rlList").innerHTML=L.length?'<table class="t"><tr><th>ON</th><th>CHECK</th><th>COLUMN</th><th>RULE (row is skipped when ...)</th><th>NOTE</th><th></th></tr>'+L.map((r,i)=>'<tr><td><span class="sw'+(r.on!==false?" on":"")+'" data-t="'+i+'"></span></td><td>'+esc(nm(r.scope||"*"))+"</td><td><b>"+esc((r.col||"any column")+(r.col2?" & "+r.col2:""))+"</b></td><td>"+esc(ruleText(r))+'</td><td class="dim">'+esc(r.note||"")+'</td><td><a data-e="'+i+'" style="cursor:pointer;color:var(--ac)">edit</a> &nbsp; <a data-d="'+i+'" style="cursor:pointer;color:#e5484d">delete</a></td></tr>').join("")+"</table>":'<div class="empty">No rules yet. Nothing is skipped.</div>';
-  $("rlList").querySelectorAll("[data-t]").forEach(x=>x.onclick=async()=>{if(!await rulePw())return;const r=L[+x.dataset.t];r.on=r.on===false;await saveConfig();renderRules();});
-  $("rlList").querySelectorAll("[data-d]").forEach(x=>x.onclick=async()=>{if(!await rulePw())return;if(!confirm("Delete this rule?"))return;L.splice(+x.dataset.d,1);await saveConfig();renderRules();});
+  $("rlList").querySelectorAll("[data-t]").forEach(x=>x.onclick=async()=>{if(!await rulePw())return;const r=L[+x.dataset.t];r.on=r.on===false;const sg=psig(r);if(PIN_SIGS.indexOf(sg)>=0){if(r.on===false)pinOff(sg);else pinOn(sg);}await saveConfig();renderRules();});
+  $("rlList").querySelectorAll("[data-d]").forEach(x=>x.onclick=async()=>{if(!await rulePw())return;if(!confirm("Delete this rule?"))return;{const sg=psig(L[+x.dataset.d]);if(PIN_SIGS.indexOf(sg)>=0)pinOff(sg);}L.splice(+x.dataset.d,1);await saveConfig();renderRules();});
   $("rlList").querySelectorAll("[data-e]").forEach(x=>x.onclick=async()=>{if(!await rulePw())return;const r=L[+x.dataset.e];S.rlEdit=r.id;$("rlScope").value=r.scope||"*";$("rlCol").value=r.col||"";$("rlCol2").value=r.col2||"";$("rlOp").value=r.op;$("rlMode").value=r.mode==="cell"?"cell":"row";$("rlVal").value=r.val||"";$("rlNote").value=r.note||"";$("rlAdd").textContent="SAVE RULE";});
   $("rlAdd").onclick=async()=>{
     if(!await rulePw())return;
@@ -1201,7 +1240,7 @@ function renderRules(){
     if((op==="neither"||op==="pair"||op==="bothblank")&&(!col||!$("rlCol2").value.trim())){toast("NEITHER needs two columns, e.g. SVC CAT (S) and SVC CAT (T).","bad");return;}
     if(!col&&(lenOp||op==="blank"||op==="nblank")){toast("Choose the column for this rule.","bad");return;}
     const o={id:S.rlEdit||("r"+Date.now().toString(36)),on:true,scope:$("rlScope").value||"*",col,col2:$("rlCol2").value.trim(),op,val,mode:$("rlMode").value,note:$("rlNote").value.trim()};
-    const k=L.findIndex(x=>x.id===o.id);if(k>=0){o.on=L[k].on!==false;L[k]=o;}else L.push(o);
+    const k=L.findIndex(x=>x.id===o.id);if(k>=0){const os=psig(L[k]);if(PIN_SIGS.indexOf(os)>=0&&os!==psig(o))pinOff(os);o.on=L[k].on!==false;L[k]=o;}else L.push(o);pinOn(psig(o));
     S.rlEdit=null;$("rlVal").value="";$("rlNote").value="";$("rlCol2").value="";$("rlAdd").textContent="ADD RULE";
     await saveConfig();renderRules();toast("Rule saved - the tally runs again.","ok");
   };
@@ -1238,6 +1277,8 @@ function bindAdmin(){
     await saveConfig();$("uM").value=$("uC").value=$("uP").value="";$("uR").value="user";S.usig="";renderUsers();toast("Saved.","ok");};
   const paintDup=()=>{const b=$("btnDupLock");if(b&&S.cfg)b.textContent="DUPLICATE-LOGIN LOCK: "+(S.cfg.dupLock===false?"OFF":"ON");};paintDup();
   $("btnDupLock").onclick=async()=>{if(!S.cfg)return;S.cfg.dupLock=(S.cfg.dupLock===false);await saveConfig(true);paintDup();hlog(S.user,"DUP LOCK",S.cfg.dupLock===false?"OFF":"ON");toast(S.cfg.dupLock===false?"Duplicate-login lock OFF - nobody gets locked.":"Duplicate-login lock ON (a lock clears itself after "+(S.cfg.lockMin||30)+" min).","ok");};
+  const paintAA=()=>{const b=$("btnAutoAud");if(b&&S.cfg)b.textContent="AUTO AUDIT: "+(S.cfg.autoAudit===true?"ON":"OFF");};paintAA();
+  $("btnAutoAud").onclick=async()=>{if(!S.cfg)return;S.cfg.autoAudit=(S.cfg.autoAudit!==true);await saveConfig(true);paintAA();hlog(S.user,"AUTO AUDIT",S.cfg.autoAudit?"ON":"OFF");toast(S.cfg.autoAudit?"Auto audit ON: it runs ONCE after a new PPOone drop / new data (users must also tick the switch).":"Auto audit OFF for everybody.","ok");};
   $("btnUnlockAll").onclick=async()=>{let n=0;for(const d of ["Locks","Sessions"]){try{const D=await cdir(d);const names=[];for await(const [nm,h] of D.entries()){if(h.kind==="file")names.push(nm);}for(const nm of names){await removeFile(D,nm);if(d==="Locks")n++;}}catch(e){}}S.locks={};S.usig="";hlog(S.user,"UNLOCK ALL",n+" lock(s) removed");renderUsers();toast("All IDs unlocked ("+n+" lock file(s) removed).","ok");};
   $("btnUPush").onclick=async()=>{await pushExcel();hlog(S.user,"PUSH USERS",S.cfg.users.filter(u=>u.active).length+" users");toast("User list written for Excel.","ok");};
   $("btnUPaste").onclick=()=>askText("Paste the list (MSID, computer name, password optional - tab or comma separated, one person per line)",async t=>{
@@ -1296,7 +1337,7 @@ async function pollEvent(){
     if(!first||age<60000){
       if(kind==="EXTRACTED"){bigPop("EXTRACTED",txt||"Extract finished - data is in the tool.");hlog("excel","EXTRACTED",txt);}
       else if(kind==="STOPPED"){runBar(true,"EXTRACT stopped in Excel.","bad");hlog("excel","EXTRACT STOPPED",txt);}
-      else if(kind==="CLEARED"){try{E.document.getElementById("btnClear").click();}catch(e){}try{api().clearAll();}catch(e){}ppoForget();S.dataSig="";S.xfer="";$("stXfer").textContent="-";renderAll();bigPop("CLEARED",txt||"Everything is cleared.","clr");}
+      else if(kind==="CLEARED"){try{E.document.getElementById("btnClear").click();}catch(e){}try{api().clearAll();}catch(e){}ppoForget();S.dataSig="";S.dataHash="";S.xfer="";$("stXfer").textContent="-";renderAll();bigPop("CLEARED",txt||"Everything is cleared.","clr");}
     }
   }
   const c=await readFile(S.bridge,"excel_conn.txt");
@@ -1484,7 +1525,7 @@ async function ppoFromFile(f){
     E.__doPaste({value:t},"PPOone");ppoSave(t,f.name);
   }catch(e){toast("PPOone dump failed: "+e.message,"bad");return;}
   setTimeout(()=>{renderAll();const rr=api().rows();hint("PPOone rows: "+rr.P);toast("PPOone: "+rr.P+" rows loaded from "+f.name,"ok");try{const z=$("ppoDrop");z.classList.add("ok");z.textContent="PPOone loaded ✓ · "+rr.P+" rows · drop again to replace";}catch(e){}hlog(S.user,"PPOone DUMP",f.name+" · "+rr.P+" rows");
-    if($("swAuto").classList.contains("on")&&rr.P>0&&(rr.I+rr.O+rr.S+rr.T)>0)runTally();},150);
+    autoAudit();},150);
 }
 function bindDrop(){
   const z=$("ppoDrop"),inp=$("ppoFile");
@@ -1509,13 +1550,13 @@ async function start(){
   $("lgX").onclick=()=>{$("logov").hidden=true;};$("lgRef").onclick=async()=>{await refreshEvents();renderLg();};
   $("lgCsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"';download("ECLIPSE_login_log.csv","\ufeff"+["Time,User,Event,Result,PC"].concat((S.evs||[]).filter(x=>x.lv==="sme").map(r=>[r.t,r.who,r.act,r.res,r.pc].map(q).join(","))).join("\r\n"));};
   $("mOk").onclick=adminTry;$("mNo").onclick=()=>$("modal").classList.remove("on");$("mPass").onkeydown=e=>{if(e.key==="Enter")adminTry();if(e.key==="Escape")$("modal").classList.remove("on");};
-  $("btnRun").onclick=runTally;$("swAuto").onclick=()=>$("swAuto").classList.toggle("on");$("swLink").onclick=()=>$("swLink").classList.toggle("on");
+  $("btnRun").onclick=runTally;$("swAuto").onclick=()=>{if(!(S.cfg&&S.cfg.autoAudit===true)){toast("Auto audit is OFF in admin. Use the RUN ALL 26 button.","");return;}$("swAuto").classList.toggle("on");};$("swLink").onclick=()=>$("swLink").classList.toggle("on");
   $("btnTCopy").onclick=()=>{const a=api();copyText(["Check\tNeeds\tMatched\tNot matched\tResult"].concat(a.results.map(r=>[r.it.grp+" - "+r.it.label,r.it.need.map(k=>a.NAMES[k]).join("+"),r.g,r.r,r.status].join("\t"))).join("\n"),"Tally copied.");};
   $("btnECopy").onclick=()=>copyText(tsvErr(),"Error list copied.");
   $("btnECsv").onclick=()=>{const a=api(),q=v=>'"'+String(v).replace(/"/g,'""')+'"';download("ECLIPSE_error_list.csv","\ufeff"+["Check,Row,Column,Value,Row data"].concat(a.errors.map(e=>[e.it.grp+" - "+e.it.label,e.row,e.col,e.val,e.rt].map(q).join(","))).join("\r\n"));};
   $("btnLinkOpen").onclick=()=>doKey("LINK");
   $("btnPpoPaste").onclick=()=>askText("Paste the PPOone rows here (copied from the PPOone page)",t=>{if(!t.trim())return;try{E.__doPaste({value:t},"PPOone");ppoSave(t,"pasted");}catch(e){toast("PPOone paste failed: "+e.message,"bad");return;}
-    setTimeout(()=>{renderAll();const rr=api().rows();hint("PPOone rows: "+rr.P);toast("PPOone: "+rr.P+" rows loaded.","ok");if($("swAuto").classList.contains("on")&&rr.P>0&&(rr.I+rr.O+rr.S+rr.T)>0)runTally();},120);});
+    setTimeout(()=>{renderAll();const rr=api().rows();hint("PPOone rows: "+rr.P);toast("PPOone: "+rr.P+" rows loaded.","ok");autoAudit();},120);});
   $("shCopy").onclick=()=>{const t=$("shBody").querySelector("table.mx");if(!t)return;copyText(Array.prototype.filter.call(t.tBodies[0].rows,r=>r.style.display!=="none").map(r=>Array.prototype.map.call(r.cells,c=>c.textContent.trim()).join("\t")).join("\n"),"Rows copied.");};
   bindAdmin();bindDrop();
   if(!window.showDirectoryPicker){$("lfoot").innerHTML='<b style="color:#d6364b">This browser cannot open the data folder. Please use Chrome or Edge.</b>';}
