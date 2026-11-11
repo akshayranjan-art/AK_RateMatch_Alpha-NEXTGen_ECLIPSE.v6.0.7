@@ -320,13 +320,13 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
      <div class="fr"><input class="field" id="inMk" placeholder="Market"><input class="field" id="inOp" placeholder="OPS Tbl #"></div>
      <div class="tk"><label><input type="checkbox" id="tkT" checked> T_Table</label><label><input type="checkbox" id="tkI" checked> Irate</label><label><input type="checkbox" id="tkS"> S_Table</label><label><input type="checkbox" id="tkO"> Orate</label></div></div>
     <div class="raise card"><div class="l"><span>AUTOMATION</span></div>
-     <div class="ctl"><span>Auto MASTER TALLY when PPOone + data are in</span><span class="sw" id="swAuto" title="Works only when the admin has switched AUTO AUDIT ON"></span></div>
+     <div class="ctl"><span>Auto MASTER TALLY when PPOone + data are in</span><span class="sw" id="swAuto" title="Controlled by the admin"></span></div>
      <div class="ctl"><span>Open PPOone link after data comes in</span><span class="sw on" id="swLink"></span></div>
-     <div class="ctl"><span>PPOone data</span><span><button class="btn p" id="btnPpoPaste" style="padding:4px 12px">⇩ PASTE</button></span></div>
+     <div class="ctl"><span>PPOone data</span><span><button class="btn p" id="btnPpoPaste" style="padding:4px 12px">⇩ PASTE</button> <button class="btn" id="btnRun" style="padding:4px 12px">▶ RUN ALL 26</button></span></div>
      <div class="drop" id="ppoDrop">⇩ DROP PPOone FILE HERE &nbsp;(xlsx / csv / txt) &nbsp;or click</div><input type="file" id="ppoFile" hidden accept=".xlsx,.xlsm,.csv,.tsv,.txt">
      <div class="ctl"><span>Excel PPOone link</span><button class="btn" id="btnLinkOpen">OPEN</button></div>
      <div class="ctl" style="align-items:flex-start"><span id="progTxt" class="dim">Idle</span></div></div>
-    <div class="raise panel tallyp"><div class="l"><span>MASTER TALLY</span><span><button class="btn" id="btnRun" style="padding:4px 12px">▶ RUN ALL 26</button> <button class="btn" id="btnTCopy" style="padding:4px 12px">COPY</button></span></div><div class="sc" id="tallyBox"></div></div>
+    <div class="raise panel tallyp"><div class="l"><span>MASTER TALLY</span><span><button class="btn" id="btnTCopy" style="padding:4px 12px">COPY</button></span></div><div class="sc" id="tallyBox"></div></div>
    </div>
    <div class="dright">
     <div class="kpis" id="kpis"></div>
@@ -981,7 +981,8 @@ function ppoMark(n,why){try{const z=$("ppoDrop");z.classList.add("ok");z.textCon
 function ppoRestore(quiet,force){try{if(!S.ppoTxt||!E)return false;const a=api();if(!a||(!force&&a.rows().P>0))return false;E.__doPaste({value:S.ppoTxt},"PPOone");const n=api().rows().P;if(n>0){ppoMark(n,"kept from cache");if(!quiet)hint("PPOone kept: "+n+" rows (cache)");return true;}}catch(e){console.error(e);}return false;}
 async function ppoLoadCache(){try{const v=await idb("readonly",st=>st.get("ppo"));if(v&&v.t){S.ppoTxt=v.t;S.ppoName=v.name||"";if(ppoRestore(true)){renderAll();}}}catch(e){}}
 function hashStr(t){let h=5381;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))|0;return h+":"+t.length;}
-function autoOn(){return !!(S.cfg&&S.cfg.autoAudit===true&&$("swAuto").classList.contains("on"));}
+function autoOn(){return !!(S.cfg&&S.cfg.autoAudit===true);}
+setInterval(()=>{try{const w=$("swAuto");if(w)w.classList.toggle("on",autoOn());}catch(e){}},1500);
 function autoAudit(key){if(!autoOn())return;const rr=api().rows();if(!(rr.P>0&&(rr.I+rr.O+rr.S+rr.T)>0))return;if(key&&key===S.lastAutoKey)return;S.lastAutoKey=key||("k"+Date.now());setTimeout(runTally,60);}
 function onIngested(info){
   ppoRestore(true,true);
@@ -1278,7 +1279,7 @@ function bindAdmin(){
   const paintDup=()=>{const b=$("btnDupLock");if(b&&S.cfg)b.textContent="DUPLICATE-LOGIN LOCK: "+(S.cfg.dupLock===false?"OFF":"ON");};paintDup();
   $("btnDupLock").onclick=async()=>{if(!S.cfg)return;S.cfg.dupLock=(S.cfg.dupLock===false);await saveConfig(true);paintDup();hlog(S.user,"DUP LOCK",S.cfg.dupLock===false?"OFF":"ON");toast(S.cfg.dupLock===false?"Duplicate-login lock OFF - nobody gets locked.":"Duplicate-login lock ON (a lock clears itself after "+(S.cfg.lockMin||30)+" min).","ok");};
   const paintAA=()=>{const b=$("btnAutoAud");if(b&&S.cfg)b.textContent="AUTO AUDIT: "+(S.cfg.autoAudit===true?"ON":"OFF");};paintAA();
-  $("btnAutoAud").onclick=async()=>{if(!S.cfg)return;S.cfg.autoAudit=(S.cfg.autoAudit!==true);await saveConfig(true);paintAA();hlog(S.user,"AUTO AUDIT",S.cfg.autoAudit?"ON":"OFF");toast(S.cfg.autoAudit?"Auto audit ON: it runs ONCE after a new PPOone drop / new data (users must also tick the switch).":"Auto audit OFF for everybody.","ok");};
+  $("btnAutoAud").onclick=async()=>{if(!S.cfg)return;S.cfg.autoAudit=(S.cfg.autoAudit!==true);await saveConfig(true);paintAA();hlog(S.user,"AUTO AUDIT",S.cfg.autoAudit?"ON":"OFF");toast(S.cfg.autoAudit?"Auto audit ON: it runs ONCE after a new PPOone drop / new data.":"Auto audit OFF for everybody.","ok");};
   $("btnUnlockAll").onclick=async()=>{let n=0;for(const d of ["Locks","Sessions"]){try{const D=await cdir(d);const names=[];for await(const [nm,h] of D.entries()){if(h.kind==="file")names.push(nm);}for(const nm of names){await removeFile(D,nm);if(d==="Locks")n++;}}catch(e){}}S.locks={};S.usig="";hlog(S.user,"UNLOCK ALL",n+" lock(s) removed");renderUsers();toast("All IDs unlocked ("+n+" lock file(s) removed).","ok");};
   $("btnUPush").onclick=async()=>{await pushExcel();hlog(S.user,"PUSH USERS",S.cfg.users.filter(u=>u.active).length+" users");toast("User list written for Excel.","ok");};
   $("btnUPaste").onclick=()=>askText("Paste the list (MSID, computer name, password optional - tab or comma separated, one person per line)",async t=>{
@@ -1550,7 +1551,7 @@ async function start(){
   $("lgX").onclick=()=>{$("logov").hidden=true;};$("lgRef").onclick=async()=>{await refreshEvents();renderLg();};
   $("lgCsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"';download("ECLIPSE_login_log.csv","\ufeff"+["Time,User,Event,Result,PC"].concat((S.evs||[]).filter(x=>x.lv==="sme").map(r=>[r.t,r.who,r.act,r.res,r.pc].map(q).join(","))).join("\r\n"));};
   $("mOk").onclick=adminTry;$("mNo").onclick=()=>$("modal").classList.remove("on");$("mPass").onkeydown=e=>{if(e.key==="Enter")adminTry();if(e.key==="Escape")$("modal").classList.remove("on");};
-  $("btnRun").onclick=runTally;$("swAuto").onclick=()=>{if(!(S.cfg&&S.cfg.autoAudit===true)){toast("Auto audit is OFF in admin. Use the RUN ALL 26 button.","");return;}$("swAuto").classList.toggle("on");};$("swLink").onclick=()=>$("swLink").classList.toggle("on");
+  $("btnRun").onclick=runTally;$("swAuto").onclick=()=>{toast(autoOn()?"Auto audit is ON (set by the admin).":"Auto audit is OFF (set by the admin). Use RUN ALL 26.","");};$("swLink").onclick=()=>$("swLink").classList.toggle("on");
   $("btnTCopy").onclick=()=>{const a=api();copyText(["Check\tNeeds\tMatched\tNot matched\tResult"].concat(a.results.map(r=>[r.it.grp+" - "+r.it.label,r.it.need.map(k=>a.NAMES[k]).join("+"),r.g,r.r,r.status].join("\t"))).join("\n"),"Tally copied.");};
   $("btnECopy").onclick=()=>copyText(tsvErr(),"Error list copied.");
   $("btnECsv").onclick=()=>{const a=api(),q=v=>'"'+String(v).replace(/"/g,'""')+'"';download("ECLIPSE_error_list.csv","\ufeff"+["Check,Row,Column,Value,Row data"].concat(a.errors.map(e=>[e.it.grp+" - "+e.it.label,e.row,e.col,e.val,e.rt].map(q).join(","))).join("\r\n"));};
