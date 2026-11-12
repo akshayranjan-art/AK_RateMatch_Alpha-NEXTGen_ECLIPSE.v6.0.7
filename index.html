@@ -1118,11 +1118,11 @@ function jumpTo(e){
   $("auInfo").textContent="row "+e.row+" · "+e.col+" = "+(e.val||"(blank)");
 }
 let _runTm=null;
-function runBar(on,txt,kind){
+function runBar(on,txt,kind,nostop){
   const b=$("runBar");if(!b)return;clearInterval(_runTm);
   if(!on){b.hidden=true;return;}
   b.className=kind||"";b.hidden=false;
-  const t0=Date.now();const paint=()=>{const sec=Math.round((Date.now()-t0)/1000);b.innerHTML='<i class="dot"></i><span>'+esc(txt)+(kind?'':' · '+sec+' s · please wait')+'</span>'+(kind?'':'<button class="rs" id="runStop" title="Stop">■ STOP</button>');const st=$("runStop");if(st)st.onclick=stopExtract;};
+  const t0=Date.now();const paint=()=>{const sec=Math.round((Date.now()-t0)/1000);b.innerHTML='<i class="dot"></i><span>'+esc(txt)+(kind?'':' · '+sec+' s · please wait')+'</span>'+(kind||nostop?'':'<button class="rs" id="runStop" title="Stop">■ STOP</button>');const st=$("runStop");if(st)st.onclick=stopExtract;};
   paint();if(!kind)_runTm=setInterval(paint,1000);else setTimeout(()=>{if(b.className===kind)b.hidden=true;},5000);
 }
 async function stopExtract(){
@@ -1164,13 +1164,29 @@ async function doKey(id){
     const before=S.dataSig,nm=await excelCmd("EXTRACT",mk,op,fl);
     if(nm){btn.classList.add("busy");hint("EXTRACT running in Excel - the data comes here by itself...");runBar(true,"EXTRACT running in Excel");const t0=Date.now();while(Date.now()-t0<180000&&S.dataSig===before&&S.exSeq===seq){await sleep(700);}
       if(S.exSeq!==seq)return;
-      btn.classList.remove("busy");if(S.dataSig===before){runBar(true,"EXTRACT: no data came back yet. Excel may be stuck - press ■ and click EXTRACT again.","bad");toast("No data came back from Excel yet.","bad");}else{runBar(true,"EXTRACT DONE ✓","done");autoLink();}}
+      if(S.dataSig===before){btn.classList.remove("busy");runBar(true,"EXTRACT: no data came back yet. Excel may be stuck - press ■ and click EXTRACT again.","bad");toast("No data came back from Excel yet.","bad");}
+      else{
+        // every ticked table MUST arrive: wait for it, if one is missing pull it once with TRANSFER
+        const nm2={T:"T_Table",I:"Irate",S:"S_Table",O:"Orate"},have=()=>{const r=api().rows();return fl.split("").filter(k=>!(r[k]>0));};
+        let miss=have();
+        if(miss.length){runBar(true,"EXTRACT: waiting for "+miss.map(k=>nm2[k]).join(", "),"",true);const t1=Date.now();while(Date.now()-t1<25000&&(miss=have()).length&&S.exSeq===seq)await sleep(700);}
+        if(miss.length&&S.exSeq===seq){runBar(true,"Pulling "+miss.map(k=>nm2[k]).join(", ")+" from Excel (TRANSFER)","",true);await excelCmd("TRANSFER");const t2=Date.now();while(Date.now()-t2<40000&&(miss=have()).length&&S.exSeq===seq)await sleep(700);}
+        btn.classList.remove("busy");
+        if(S.exSeq!==seq)return;
+        const r=api().rows(),got=fl.split("").map(k=>nm2[k]+" "+(r[k]||0)).join(" · ");
+        if(miss.length){runBar(true,"EXTRACT: "+miss.map(k=>nm2[k]).join(", ")+" came back EMPTY (Excel found no rows for this Market / OPS). Got: "+got,"bad");toast("Empty from Excel: "+miss.map(k=>nm2[k]).join(", "),"bad");}
+        else{runBar(true,"EXTRACT DONE ✓ · "+got,"done");autoLink();}
+      }}
     else runBar(false);
     return;
   }
   if(id==="CLEAR"){
     if(!confirm("MASTER CLEAR: all 5 sheets in Excel and this page will be cleared. Continue?"))return;
-    if(await excelCmd("CLEAR")){try{E.document.getElementById("btnClear").click();}catch(e){}api().clearAll();ppoForget();S.dataSig="";S.dataHash="";S.xfer="";$("stXfer").textContent="-";renderAll();try{const z=$("ppoDrop");z.classList.remove("ok");z.innerHTML="DROP PPOone FILE HERE &nbsp;(xlsx / csv / txt) &nbsp;or click";}catch(e){}$("progTxt").textContent="Cleared.";toast("MASTER CLEAR sent.","ok");}
+    if(await excelCmd("CLEAR")){try{E.document.getElementById("btnClear").click();}catch(e){}api().clearAll();ppoForget();S.dataSig="";S.dataHash="";S.xfer="";$("stXfer").textContent="-";renderAll();try{const z=$("ppoDrop");z.classList.remove("ok");z.innerHTML="DROP PPOone FILE HERE &nbsp;(xlsx / csv / txt) &nbsp;or click";}catch(e){}$("progTxt").textContent="Cleared.";toast("MASTER CLEAR sent.","ok");
+      const t0=Date.now();S.clrAt=0;runBar(true,"MASTER CLEAR - erasing the Excel sheets and this page","",true);
+      while(Date.now()-t0<90000&&!(S.clrAt>=t0))await sleep(500);
+      const sec=Math.round((Date.now()-t0)/1000);
+      if(S.clrAt>=t0)runBar(true,"MASTER CLEAR DONE ✓ · erased in "+sec+" s","done");else runBar(true,"MASTER CLEAR sent - Excel did not confirm yet (is Excel open?)","bad");}
     return;
   }
   if(id==="LINK"){const l=api().ppoLink;if(!l){toast("No PPOone link yet - press TRANSFER once.","bad");return;}window.open(l,"ppoone");return;}
@@ -1338,7 +1354,7 @@ async function pollEvent(){
     if(!first||age<60000){
       if(kind==="EXTRACTED"){bigPop("EXTRACTED",txt||"Extract finished - data is in the tool.");hlog("excel","EXTRACTED",txt);}
       else if(kind==="STOPPED"){runBar(true,"EXTRACT stopped in Excel.","bad");hlog("excel","EXTRACT STOPPED",txt);}
-      else if(kind==="CLEARED"){try{E.document.getElementById("btnClear").click();}catch(e){}try{api().clearAll();}catch(e){}ppoForget();S.dataSig="";S.dataHash="";S.xfer="";$("stXfer").textContent="-";renderAll();bigPop("CLEARED",txt||"Everything is cleared.","clr");}
+      else if(kind==="CLEARED"){S.clrAt=Date.now();try{E.document.getElementById("btnClear").click();}catch(e){}try{api().clearAll();}catch(e){}ppoForget();S.dataSig="";S.dataHash="";S.xfer="";$("stXfer").textContent="-";renderAll();bigPop("CLEARED",txt||"Everything is cleared.","clr");}
     }
   }
   const c=await readFile(S.bridge,"excel_conn.txt");
