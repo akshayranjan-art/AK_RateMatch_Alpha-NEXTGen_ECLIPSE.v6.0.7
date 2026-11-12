@@ -383,7 +383,7 @@ html.prot input,html.prot textarea,html.prot select{-webkit-user-select:text;use
      <div class="dim" style="font-size:10.5px;margin:6px 0">LOCKED = eclipse_shared.json, its backup and the Active list are stored encrypted with the folder password. VS Code, Notepad or anything else shows only scrambled text; this tool opens them by itself. UNLOCK only when you need to read them, then LOCK again. The Excel control files in <b>Control</b> are read by the Excel macro, so they stay plain until the same password is added on the Excel side.</div>
      <div class="row2"><span id="encState" class="dim"></span><button class="btn p" id="encNow">REWRITE NOW</button></div></div></div></div>
 
-   <div class="apane" id="ap-log"><div class="raise card col" style="flex:1;min-height:0"><div class="l"><span>ACTIVITY LOG · Excel and HTML</span><button class="btn" id="logCsv">⤓ CSV</button></div><div style="flex:1;min-height:0;overflow:auto"><table class="t" id="logTable"></table></div></div></div>
+   <div class="apane" id="ap-log"><div class="raise card col" style="flex:1;min-height:0"><div class="l"><span>ACTIVITY LOG · Excel and HTML</span><button class="btn" id="logCsv">⤓ CSV</button></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:6px 0"><select id="lfType" class="inp"><option value="">All actions</option><option value="EXTRACT">EXTRACT only</option><option value="LOGIN">Login / logout / password</option><option value="OTHER">Other</option></select><select id="lfUser" class="inp"><option value="">All IDs</option></select><label style="font-size:12px"><input type="checkbox" id="lfToday"> Today only</label></div><div id="lfCount" style="font-size:12px;margin:2px 0 6px"></div><div style="flex:1;min-height:0;overflow:auto"><table class="t" id="logTable"></table></div></div></div>
   </div></section>
  </div>
  <div id="ann" hidden><span class="ai2">📢</span><div id="annMq"><span id="annTxt"></span></div></div>
@@ -488,14 +488,16 @@ async function cdir(n){const C=await ctlDir();return C.getDirectoryHandle(n,{cre
 async function evAdd(o){if(!S.shared)return;try{const d=await cdir("Events");await writeSec(d,Date.now()+"_"+Math.random().toString(36).slice(2,6)+".json",JSON.stringify(o));}catch(e){}}
 async function evLoad(max){
   const out=[];
-  try{const d=await cdir("Events"),names=[];for await(const [n,h] of d.entries()){if(h.kind==="file")names.push(n);}
+  try{const d=await cdir("Events");let names=[];for await(const [n,h] of d.entries()){if(h.kind==="file")names.push(n);}
     names.sort().reverse();
+    const cut=Date.now()-30*864e5;
+    if(S.admin){for(const n of names.filter(n=>(parseInt(n,10)||Date.now())<cut))await removeFile(d,n);}
+    names=names.filter(n=>(parseInt(n,10)||Date.now())>=cut);
     for(const n of names.slice(0,max)){const r=await readSec(d,n);if(r){try{out.push(JSON.parse(r.text));}catch(e){}}}
-    if(S.admin&&names.length>900){for(const n of names.slice(600))await removeFile(d,n);}
   }catch(e){}
   return out;
 }
-async function refreshEvents(){S.evs=await evLoad(400);}
+async function refreshEvents(){S.evs=await evLoad(1500);}
 async function readReset(msid){try{const r=await readSec(await cdir("Resets"),safeN(msid)+".json");return r?JSON.parse(r.text):null;}catch(e){return null;}}
 async function writeReset(msid,pass){const d=await cdir("Resets");await writeSec(d,safeN(msid)+".json",JSON.stringify({pass:pass,t:nowStr(),pc:myPC()}));}
 async function sessRelease(msid){try{await removeFile(await cdir("Sessions"),safeN(msid)+".json");}catch(e){}}
@@ -988,7 +990,6 @@ function autoAudit(key){if(!autoOn())return;const rr=api().rows();if(!(rr.P>0&&(
 function onIngested(info){
   ppoRestore(true,true);
   S.xfer=(info&&info.stamp)||nowStr();$("stXfer").textContent=S.xfer;
-  hlog("excel","DATA RECEIVED",S.xfer+(info&&info.empt&&info.empt.length?"  (empty: "+info.empt.join(", ")+")":""));
   if(info&&info.empt&&info.empt.length)toast("Empty in Excel: "+info.empt.join(", "),"");
   renderAll();
   autoAudit("D|"+(S.dataHash||S.dataSig));
@@ -1162,6 +1163,7 @@ async function doKey(id){
     try{ppoForget();E.eval("userPPOoneData=[];try{UpdateDataLEDs();}catch(e){}");const z=$("ppoDrop");z.classList.remove("ok");z.innerHTML="DROP PPOone FILE HERE &nbsp;(xlsx / csv / txt) &nbsp;or click";renderAll();}catch(e){console.error(e);}
     S.stopReq=false;try{await removeFile(S.bridge,"stop.flag");}catch(e){}
     const seq=S.exSeq=(S.exSeq||0)+1;
+    evAdd({t:nowStr(),who:S.user,act:"EXTRACT "+mk+" "+op+" "+fl,res:"started",pc:pcLabel(),lv:"ext"});
     const before=S.dataSig,nm=await excelCmd("EXTRACT",mk,op,fl);
     if(nm){btn.classList.add("busy");hint("EXTRACT running in Excel - the data comes here by itself...");runBar(true,"EXTRACT running in Excel");const t0=Date.now();while(Date.now()-t0<180000&&S.dataSig===before&&S.exSeq===seq){await sleep(700);}
       if(S.exSeq!==seq)return;
@@ -1175,8 +1177,8 @@ async function doKey(id){
         btn.classList.remove("busy");
         if(S.exSeq!==seq)return;
         const r=api().rows(),got=fl.split("").map(k=>nm2[k]+" "+(r[k]||0)).join(" · ");
-        if(miss.length){runBar(true,"EXTRACT: "+miss.map(k=>nm2[k]).join(", ")+" came back EMPTY (Excel found no rows for this Market / OPS). Got: "+got,"bad");toast("Empty from Excel: "+miss.map(k=>nm2[k]).join(", "),"bad");}
-        else{runBar(true,"EXTRACT DONE ✓ · "+got,"done");autoLink();}
+        if(miss.length){evAdd({t:nowStr(),who:S.user,act:"EXTRACT "+mk+" "+op+" "+fl,res:"EMPTY: "+miss.map(k=>nm2[k]).join(", "),pc:pcLabel(),lv:"ext"});runBar(true,"EXTRACT: "+miss.map(k=>nm2[k]).join(", ")+" came back EMPTY (Excel found no rows for this Market / OPS). Got: "+got,"bad");toast("Empty from Excel: "+miss.map(k=>nm2[k]).join(", "),"bad");}
+        else{runBar(true,"EXTRACT DONE ✓ · "+got,"done");evAdd({t:nowStr(),who:S.user,act:"EXTRACT "+mk+" "+op+" "+fl,res:"DONE · "+got,pc:pcLabel(),lv:"ext"});autoLink();}
       }}
     else runBar(false);
     return;
@@ -1277,11 +1279,28 @@ function renderBridge(){
    '<div class="dim">Folder: '+esc(S.dir?S.dir.name:"-")+"</div><div class='dim'>Excel user: "+esc(hb.who||"-")+" · PC: "+esc(hb.pc||"-")+" · "+esc(hb.ver||"")+"</div><div class='dim'>State: "+esc(hb.state||"-")+" · last result: "+esc(hb.last||"-")+"</div>";
 }
 function logRows(){
-  const rows=S.xlog.map(x=>({t:x.t,who:x.who,act:x.act,res:x.res,src:"excel"})).concat(S.hlog.filter(x=>!x.sh).map(x=>({t:x.t,who:x.who,act:x.act,res:x.res,src:"html"}))).concat((S.evs||[]).map(x=>({t:x.t,who:x.who,act:x.act,res:x.res,src:"login"+(x.pc?" · "+x.pc:"")})));
+  const extEv=(S.evs||[]).some(x=>x.lv==="ext");
+  const rows=S.xlog.filter(x=>x.act!=="DATA RECEIVED"&&!(extEv&&/^EXTRACT \d/.test(x.act))).map(x=>({t:x.t,who:x.who,act:x.act,res:x.res,src:"excel"})).concat(S.hlog.filter(x=>!x.sh&&x.act!=="DATA RECEIVED").map(x=>({t:x.t,who:x.who,act:x.act,res:x.res,src:"html"}))).concat((S.evs||[]).filter(x=>x.act!=="DATA RECEIVED").map(x=>({t:x.t,who:x.who,act:x.act,res:x.res,src:(x.lv==="ext"?"extract":"login")+(x.pc?" · "+x.pc:"")})));
   rows.sort((a,b)=>a.t<b.t?1:a.t>b.t?-1:0);return rows;
 }
+function logFiltered(){
+  let rows=logRows();const ty=($("lfType")||{}).value||"",us=($("lfUser")||{}).value||"",td=$("lfToday")&&$("lfToday").checked;
+  const today=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+  if(ty==="EXTRACT")rows=rows.filter(r=>/^EXTRACT/.test(r.act));
+  else if(ty==="LOGIN")rows=rows.filter(r=>/^(LOGIN|LOGOUT|PASSWORD|FIRST PASSWORD|DUPLICATE|ID )/.test(r.act));
+  else if(ty==="OTHER")rows=rows.filter(r=>!/^(EXTRACT|LOGIN|LOGOUT|PASSWORD|FIRST PASSWORD|DUPLICATE|ID )/.test(r.act));
+  if(us)rows=rows.filter(r=>String(r.who).toLowerCase()===us);
+  if(td)rows=rows.filter(r=>String(r.t).slice(0,10)===today);
+  return rows;
+}
 function renderLog(){
-  const rows=logRows().slice(0,400);
+  const sel=$("lfUser");if(sel){const all=[...new Set(logRows().map(r=>String(r.who).toLowerCase()).filter(Boolean))].sort();if(sel.options.length!==all.length+1){const cur=sel.value;sel.innerHTML='<option value="">All IDs</option>'+all.map(u=>'<option value="'+esc(u)+'">'+esc(u)+'</option>').join("");sel.value=cur;}}
+  ["lfType","lfUser","lfToday"].forEach(i=>{const e=$(i);if(e&&!e.__b){e.__b=1;e.onchange=renderLog;}});
+  const today=new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10),cnt={};
+  logRows().filter(r=>/^EXTRACT \d/.test(r.act)&&r.res==="started"&&String(r.t).slice(0,10)===today).forEach(r=>{const u=String(r.who).toLowerCase();cnt[u]=(cnt[u]||0)+1;});
+  const ks=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);
+  if($("lfCount"))$("lfCount").innerHTML=ks.length?"<b>Today's EXTRACTs:</b> "+ks.map(u=>esc(u)+" <b>"+cnt[u]+"</b>").join(" &nbsp;·&nbsp; "):"Today's EXTRACTs: none yet";
+  const rows=logFiltered().slice(0,600);
   $("logTable").innerHTML='<tr><th>TIME</th><th>WHO</th><th>ACTION</th><th>RESULT</th><th>FROM</th></tr>'+rows.map(r=>'<tr><td class="dim">'+esc(r.t)+"</td><td><b>"+esc(r.who)+"</b></td><td>"+esc(r.act)+'</td><td class="'+(/wrong|fail|error|not /i.test(r.res)?"er":"ok")+'">'+esc(r.res)+'</td><td class="dim">'+r.src+"</td></tr>").join("");
 }
 function bindAdmin(){
@@ -1322,7 +1341,7 @@ function bindAdmin(){
   $("annClr").onclick=async()=>{S.cfg.announce={on:false,text:"",dir:($("annDir").value||"ltr")};$("annIn").value="";await saveConfig(true);renderAnnounce();$("swAnn").classList.remove("on");toast("Announcement removed.","ok");};
   $("sharedBtn2").onclick=()=>pickFolder();
   $("tgtSel").onchange=async()=>{lsSet("ecl_target",$("tgtSel").value);S.userName=null;await resolveUser();toast("Now controlling the Excel of "+$("tgtSel").value,"ok");};
-  $("logCsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"';download("ECLIPSE_log.csv","\ufeff"+["Time,Who,Action,Result,From"].concat(logRows().map(r=>[r.t,r.who,r.act,r.res,r.src].map(q).join(","))).join("\r\n"));};
+  $("logCsv").onclick=()=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"';download("ECLIPSE_log.csv","\ufeff"+["Time,Who,Action,Result,From"].concat(logFiltered().map(r=>[r.t,r.who,r.act,r.res,r.src].map(q).join(","))).join("\r\n"));};
 }
 function askText(title,cb){
   const d=document.createElement("div");d.style.cssText="position:fixed;inset:0;background:rgba(40,50,80,.35);display:grid;place-items:center;z-index:95";
